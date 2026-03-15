@@ -1,0 +1,113 @@
+# =========================
+# OS / Editor
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# Logs / runtime
+# =========================
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.pid
+*.pid.lock
+*.seed
+*.out
+*.err
+
+# =========================
+# Env / Secrets
+# =========================
+.env
+.env.*
+!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+secrets.json
+*.local
+
+# =========================
+# .NET / Visual Studio
+# =========================
+bin/
+obj/
+[Bb]uild/
+[Rr]elease/
+[Dd]ebug/
+x64/
+x86/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+# Test results / coverage (.NET)
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+coverage.cobertura.xml
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+!**/packages/build/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Rider / ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Dotnet tools / local cache
+.dotnet/
+.nuget/
+
+# =========================
+# Angular / Node
+# =========================
+node_modules/
+dist/
+.tmp/
+.temp/
+.angular/cache/
+.npm/
+.pnpm-store/
+.eslintcache
+.stylelintcache
+.cache/
+.parcel-cache/
+.turbo/
+.sass-cache/
+*.tsbuildinfo
+
+# Frontend test artifacts
+playwright-report/
+test-results/
+
+# =========================
+# Docker / Containers
+# =========================
+docker-compose.override.yml
+
+# =========================
+# Misc generated files
+# =========================
+*.tmp
+*.bak
+*.orig
