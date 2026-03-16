@@ -51,6 +51,7 @@ x86/
 *.userosscache
 *.sln.docstates
 .vs/
+*.db
 
 # Test results / coverage (.NET)
 TestResults/
