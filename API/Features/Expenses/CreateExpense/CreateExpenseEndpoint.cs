@@ -9,7 +9,7 @@ public static class CreateExpenseEndpoint
 
     public static RouteGroupBuilder MapCreateExpenseEndpoint(this RouteGroupBuilder group)
     {
-        group.MapPost("/", Handle)
+        group.MapPost("/", HandleAsync)
             .WithName("CreateExpense")
             .WithSummary("Create a new expense")
             .WithDescription("Creates a new expense and returns the created resource.")
@@ -18,7 +18,7 @@ public static class CreateExpenseEndpoint
         return group;
     }
 
-    private static async Task<Results<Created<CreateExpenseResult>, ValidationProblem>> Handle(
+    private static async Task<IResult> HandleAsync(
         CreateExpenseRequest request,
         IMediator sender,
         CancellationToken cancellationToken)
