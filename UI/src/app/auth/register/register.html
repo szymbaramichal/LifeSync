@@ -1,0 +1,13 @@
+<form style="display: flex; flex-direction: column; gap: 1rem; padding: 1rem 0;" (ngSubmit)="register()">
+  <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
+    <input matInput type="email" name="email" placeholder="hello@example.com" [(ngModel)]="email">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Password</mat-label>
+    <input matInput type="password" name="password" placeholder="********" [(ngModel)]="password">
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit">Register</button>
+</form>
