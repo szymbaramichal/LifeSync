@@ -11,6 +11,7 @@ public static class ExpenseEndpoints
     public static void MapExpenseEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/expenses")
+            .RequireAuthorization()
             .WithTags("Expenses");
 
         group.MapCreateExpenseEndpoint();

@@ -96,6 +96,7 @@ dist/
 .turbo/
 .sass-cache/
 *.tsbuildinfo
+environment.ts
 
 # Frontend test artifacts
 playwright-report/

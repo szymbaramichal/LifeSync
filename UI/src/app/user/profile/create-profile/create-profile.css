@@ -1,0 +1,22 @@
+.create-profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+mat-card {
+  width: 100%;
+  max-width: 500px;
+}
+
+.full-width {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
