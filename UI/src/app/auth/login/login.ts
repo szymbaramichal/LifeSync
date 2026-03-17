@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,13 +14,15 @@ import { AuthService } from '../auth.service';
 })
 export class Login {
   private authService = inject(AuthService);
+  private router = inject(Router);
   email = '';
   password = '';
 
-  login() {
-    const user = this.authService.login(this.email, this.password);
+  async login() {
+    const user = await this.authService.login(this.email, this.password);
     if (user) {
       console.log(user)
+      this.router.navigate(['/profile']);
     }
     else {
       console.log('Login failed')

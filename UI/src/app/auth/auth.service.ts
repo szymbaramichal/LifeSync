@@ -1,4 +1,4 @@
-import { DestroyRef, Injectable, signal } from '@angular/core';
+import { DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
@@ -11,14 +11,14 @@ import {
   sendEmailVerification,
 } from 'firebase/auth';
 import { environment } from '../../environments/environment';
-import { inject } from '@angular/core/primitives/di';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private auth: Auth;
-  currentUser = signal<User | null>(null);
+  private _currentUser = signal<User | null>(null);
+  currentUser = this._currentUser.asReadonly();
   destroyRef = inject(DestroyRef);
 
   constructor() {
@@ -26,8 +26,7 @@ export class AuthService {
     this.auth = getAuth(app);
 
     const unsubscribe = onAuthStateChanged(this.auth, (user) => {
-      console.log('changed user', user);
-      this.currentUser.set(user);
+      this._currentUser.set(user);
     });
 
     this.destroyRef.onDestroy(() => unsubscribe());
@@ -43,6 +42,9 @@ export class AuthService {
 
   async login(email: string, pass: string) {
     const cred = await signInWithEmailAndPassword(this.auth, email, pass);
+    if(cred.user) {
+      const token = await cred.user.getIdToken();
+    }
     return cred.user;
   }
 

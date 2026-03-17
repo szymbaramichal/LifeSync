@@ -1,0 +1,23 @@
+<mat-toolbar color="primary">
+  <span>LifeSync</span>
+</mat-toolbar>
+
+<div style="display: flex; justify-content: center; padding-top: 50px;">
+  <mat-card style="width: 400px; max-width: 90%;">
+    <mat-card-header>
+      <mat-card-title>{{ isLoginSelected() ? 'Welcome Back' : 'Create Account' }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if(isLoginSelected()) {
+        <app-login />
+      } @else {
+        <app-register />
+      }
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button (click)="toggleLogin()">
+        {{ isLoginSelected() ? 'No account? Register' : 'Have an account? Login' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

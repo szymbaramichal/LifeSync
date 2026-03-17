@@ -1,7 +1,9 @@
 using System.Reflection;
 using API.Data;
 using API.Messaging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Extensions;
 
@@ -17,6 +19,49 @@ public static class DependencyInjection
             .AddClasses(c => c.AssignableTo(typeof(IRequestHandler<,>)))
             .AsImplementedInterfaces()
             .WithScopedLifetime());
+    }
+
+    public static void RegisterAuthentication(this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        var firebase = configuration.GetSection("Firebase");
+        var projectId = firebase["ProjectId"];
+        var authority = firebase["Authority"];
+        var audience = firebase["Audience"];
+
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = authority;  
+                options.Audience = audience; 
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = authority,
+                    ValidateAudience = true,
+                    ValidAudience = audience,
+                    ValidateLifetime = true
+                };
+            });
+
+        services.AddAuthorization();
+    }
+    
+    public static void AddCors(this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder.WithOrigins(allowedOrigins)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
     }
 
     public static void AddDatabase(this IServiceCollection services,
