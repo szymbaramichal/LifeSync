@@ -22,7 +22,7 @@ export class Login {
     const user = await this.authService.login(this.email, this.password);
     if (user) {
       console.log(user)
-      this.router.navigate(['/profile']);
+      this.router.navigate(['/dashboard/profile']);
     }
     else {
       console.log('Login failed')
