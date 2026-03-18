@@ -5,22 +5,17 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddOpenApi();
 
 builder.Services.AddCustomMediator(typeof(Program).Assembly);
 builder.Services.RegisterAuthentication(builder.Configuration);
 builder.Services.AddCors(builder.Configuration);
-
-var connectionString = builder.Configuration.GetConnectionString("DbConnection")
-    ?? throw new InvalidOperationException("Connection string 'DbConnection' was not found.");
-
-builder.Services.AddDatabase(connectionString);
+builder.Services.AddFluentValidators();
+builder.Services.AddDatabase(builder.Configuration);
 
 var app = builder.Build();
 app.ApplyDatabaseMigrations();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

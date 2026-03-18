@@ -1,4 +1,4 @@
-export interface MeResult {
+export interface MeResponse {
   id: number;
   firebaseUid: string;
   displayName: string;
@@ -13,7 +13,7 @@ export interface CreateProfileRequest {
   displayName: string;
 }
 
-export interface CreateProfileResult {
+export interface CreateProfileResponse {
   id: number;
   firebaseUid: string;
   displayName: string;

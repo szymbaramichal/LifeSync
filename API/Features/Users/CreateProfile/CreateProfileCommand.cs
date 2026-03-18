@@ -24,7 +24,7 @@ public sealed class CreateProfileHandler(ApplicationDbContext dbContext)
 
         var user = new User
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.CreateVersion7(),
             FirebaseUID = request.FirebaseUid,
             DisplayName = request.DisplayName.Trim()
         };

@@ -1,12 +1,13 @@
 using API.Extensions;
 using API.Messaging;
+using FluentValidation;
 
 namespace API.Features.Users.CreateProfile;
 
+public sealed record CreateProfileRequest(string DisplayName);
+
 public static class CreateProfileEndpoint
 {
-    private sealed record CreateProfileRequest(string DisplayName);
-
     public static RouteGroupBuilder MapCreateProfileEndpoint(this RouteGroupBuilder group)
     {
         group.MapPost("/profile", HandleAsync)
@@ -24,16 +25,20 @@ public static class CreateProfileEndpoint
         CreateProfileRequest request,
         HttpContext httpContext,
         IMediator sender,
+        IValidator<CreateProfileRequest> validator,
         CancellationToken cancellationToken)
     {
-        var firebaseUid = httpContext.User.GetFirebaseUid();
-        if (string.IsNullOrWhiteSpace(firebaseUid))
-        {
-            return TypedResults.Unauthorized();
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        
+        if (!validationResult.IsValid)
+        {            
+            return TypedResults.UnprocessableEntity(validationResult);
         }
-
+        
+        var firebaseUid = httpContext.User.GetFirebaseUid();
+        
         var result = await sender.Send(
-            new CreateProfileCommand(firebaseUid, request.DisplayName),
+            new CreateProfileCommand(firebaseUid!, request.DisplayName),
             cancellationToken);
 
         if (result is null)
@@ -45,3 +50,11 @@ public static class CreateProfileEndpoint
     }
 }
 
+public class CreateProfileRequestValidator : AbstractValidator<CreateProfileRequest>
+{
+    public CreateProfileRequestValidator()
+    {
+        RuleFor(x => x.DisplayName)
+            .NotEmpty().WithMessage("Display name is required.");
+    }
+}

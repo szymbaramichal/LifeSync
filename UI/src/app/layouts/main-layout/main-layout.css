@@ -1,0 +1,17 @@
+.app-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.main-content {
+  padding: 20px;
+}
+
+.sidebar {
+  width: 250px;
+  font-size: 30px;
+  background-color: #f5f5f5;
+}
