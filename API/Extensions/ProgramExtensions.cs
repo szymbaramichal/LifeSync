@@ -1,13 +1,15 @@
 using System.Reflection;
 using API.Data;
+using API.Features.Users.CreateProfile;
 using API.Messaging;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Extensions;
 
-public static class DependencyInjection
+public static class ProgramExtensions
 {
     public static void AddCustomMediator(this IServiceCollection services,
         params Assembly[] assemblies)
@@ -19,6 +21,12 @@ public static class DependencyInjection
             .AddClasses(c => c.AssignableTo(typeof(IRequestHandler<,>)))
             .AsImplementedInterfaces()
             .WithScopedLifetime());
+    }
+    
+    public static void AddFluentValidators(this IServiceCollection services,
+        params Assembly[] assemblies)
+    {
+        services.AddValidatorsFromAssembly(typeof(ProgramExtensions).Assembly);
     }
 
     public static void RegisterAuthentication(this IServiceCollection services,
@@ -65,8 +73,11 @@ public static class DependencyInjection
     }
 
     public static void AddDatabase(this IServiceCollection services,
-        string connectionString)
+        IConfiguration configuration)
     {
+        var connectionString = configuration.GetConnectionString("DbConnection")
+                               ?? throw new InvalidOperationException("Database connection string was not found.");
+        
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite(connectionString));
     }
@@ -80,16 +91,25 @@ public static class ApplicationStartupExtensions
         var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>()
             .CreateLogger("Startup.Migrations");
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-        var pendingMigrations = dbContext.Database.GetPendingMigrations().ToList();
-        if (pendingMigrations.Count == 0)
+        
+        if (app.Environment.IsDevelopment())
         {
-            logger.LogInformation("No pending database migrations.");
-            return;
+            dbContext.Database.EnsureDeleted();
+            dbContext.Database.Migrate();
+        }
+        else
+        {
+            var pendingMigrations = dbContext.Database.GetPendingMigrations().ToList();
+            if (pendingMigrations.Count == 0)
+            {
+                logger.LogInformation("No pending database migrations.");
+                return;
+            }
+            dbContext.Database.Migrate();
+            logger.LogInformation("Applying {Count} pending database migration(s).", pendingMigrations.Count);
+            
         }
 
-        logger.LogInformation("Applying {Count} pending database migration(s).", pendingMigrations.Count);
-        dbContext.Database.Migrate();
         logger.LogInformation("Database migrations applied successfully.");
     }
 }

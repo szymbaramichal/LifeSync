@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProfileService } from '../profile.service';
-import { MeDto } from '../models/profile.models';
+import { MeDto } from '../profile.models';
 
 @Component({
   selector: 'app-profile',
