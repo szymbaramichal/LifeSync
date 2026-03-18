@@ -1,6 +1,5 @@
 using System.Reflection;
 using API.Data;
-using API.Features.Users.CreateProfile;
 using API.Messaging;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,7 +21,7 @@ public static class ProgramExtensions
             .AsImplementedInterfaces()
             .WithScopedLifetime());
     }
-    
+
     public static void AddFluentValidators(this IServiceCollection services,
         params Assembly[] assemblies)
     {
@@ -41,8 +40,8 @@ public static class ProgramExtensions
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = authority;  
-                options.Audience = audience; 
+                options.Authority = authority;
+                options.Audience = audience;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -55,7 +54,7 @@ public static class ProgramExtensions
 
         services.AddAuthorization();
     }
-    
+
     public static void AddCors(this IServiceCollection services,
         IConfiguration configuration)
     {
@@ -77,7 +76,7 @@ public static class ProgramExtensions
     {
         var connectionString = configuration.GetConnectionString("DbConnection")
                                ?? throw new InvalidOperationException("Database connection string was not found.");
-        
+
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite(connectionString));
     }
@@ -91,7 +90,7 @@ public static class ApplicationStartupExtensions
         var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>()
             .CreateLogger("Startup.Migrations");
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        
+
         if (app.Environment.IsDevelopment())
         {
             dbContext.Database.EnsureDeleted();
@@ -107,7 +106,7 @@ public static class ApplicationStartupExtensions
             }
             dbContext.Database.Migrate();
             logger.LogInformation("Applying {Count} pending database migration(s).", pendingMigrations.Count);
-            
+
         }
 
         logger.LogInformation("Database migrations applied successfully.");
