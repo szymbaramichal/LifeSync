@@ -33,7 +33,7 @@ public static class MeEndpoint
 
         if (result is null)
         {
-            return TypedResults.NotFound();
+            return TypedResults.Forbid();
         }
 
         return TypedResults.Ok(result);

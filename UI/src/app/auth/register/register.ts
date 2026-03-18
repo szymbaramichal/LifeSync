@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -15,6 +15,7 @@ import { AuthService } from '../auth.service';
 export class Register {
   private fb = inject(FormBuilder);
   private snackBar = inject(MatSnackBar);
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
 
   registerForm: FormGroup = this.fb.nonNullable.group({
     email: ['', [Validators.email, Validators.required]],
@@ -37,7 +38,11 @@ export class Register {
       });
     }
     else {
-      this.registerForm.reset();
+      this.formDirective.resetForm();
+      this.snackBar.open('Registration successful!', 'Close', {
+        duration: 5000,
+        panelClass: ['success-snackbar']
+      });
     }
   }
 }

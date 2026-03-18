@@ -43,7 +43,7 @@ export class CreateProfile {
         next: () => {
           this.isLoading.set(false);
           this.profileForm.reset();
-          this.router.navigate(['/profile']);
+          this.router.navigate(['/dashboard/me']);
         },
         error: () => {
           this.isLoading.set(false);

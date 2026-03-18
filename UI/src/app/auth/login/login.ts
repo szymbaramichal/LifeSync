@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -18,6 +18,8 @@ export class Login {
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
   private formBuilder = inject(FormBuilder);
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
+
   loginForm: FormGroup = this.formBuilder.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
@@ -32,7 +34,8 @@ export class Login {
       });
     }
     else {
-      this.loginForm.reset();
+      this.formDirective.resetForm();
+      this.router.navigate(['/dashboard/me']);
     }
   }
 }
