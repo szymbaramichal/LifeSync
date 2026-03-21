@@ -6,7 +6,10 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Password</mat-label>
-    <input matInput type="password" name="password" placeholder="********" formControlName="password">
+    <input matInput [type]="hidePassword ? 'password' : 'text'" name="password" placeholder="********" formControlName="password">
+    <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+      <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
   </mat-form-field>
 
   <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
