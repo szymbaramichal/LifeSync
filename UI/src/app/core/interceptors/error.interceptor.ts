@@ -12,8 +12,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   const showDefaultError = () => {
     snackBar.open('Error has occurred. Please try again.', 'Close', {
-      duration: 5000,
-      panelClass: ['error-snackbar']
+      duration: 5000
     });
   };
 
@@ -34,8 +33,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
           for (const message of errorMessages) {
             snackBar.open(message, 'Close', {
-              duration: 5000,
-              panelClass: ['error-snackbar']
+              duration: 5000
             });
           }
 
