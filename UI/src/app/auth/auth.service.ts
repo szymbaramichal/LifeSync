@@ -12,6 +12,7 @@ import {
 } from 'firebase/auth';
 import { environment } from '../../environments/environment';
 import { AuthResultDto } from './auth.models';
+import { LoadingService } from '../core/services/loading.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,8 @@ import { AuthResultDto } from './auth.models';
 export class AuthService {
   private auth: Auth;
   private _currentUser = signal<User | null>(null);
+  private loadingService = inject(LoadingService);
+
   currentUser = this._currentUser.asReadonly();
   destroyRef = inject(DestroyRef);
 
@@ -34,6 +37,7 @@ export class AuthService {
   }
 
   async register(email: string, pass: string): Promise<AuthResultDto> {
+    this.loadingService.show();
     try {
       const cred = await createUserWithEmailAndPassword(this.auth, email, pass);
       if (cred.user) {
@@ -52,10 +56,13 @@ export class AuthService {
       }
 
       return { errorMessage: 'We could not register you. Please try again later.' }
+    } finally {
+      this.loadingService.hide();
     }
   }
 
   async login(email: string, pass: string): Promise<AuthResultDto> {
+    this.loadingService.show();
     try {
       const cred = await signInWithEmailAndPassword(this.auth, email, pass);
       if (cred.user) {
@@ -71,6 +78,8 @@ export class AuthService {
       }
 
       return { errorMessage: 'We could not log you in. Please try again later.' }
+    } finally {
+      this.loadingService.hide();
     }
   }
 
