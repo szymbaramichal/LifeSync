@@ -29,8 +29,7 @@ export class Login {
     const authResult = await this.authService.login(this.loginForm.value.email, this.loginForm.value.password);
     if (authResult.errorMessage) {
       this.snackBar.open(authResult.errorMessage, 'Close', {
-        duration: 5000,
-        panelClass: ['error-snackbar']
+        duration: 5000
       });
     }
     else {

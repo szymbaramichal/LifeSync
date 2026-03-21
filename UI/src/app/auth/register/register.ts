@@ -34,14 +34,12 @@ export class Register {
     if (authResult.errorMessage) {
       this.snackBar.open(authResult.errorMessage, 'Close', {
         duration: 5000,
-        panelClass: ['error-snackbar']
       });
     }
     else {
       this.formDirective.resetForm();
       this.snackBar.open('Registration successful!', 'Close', {
-        duration: 5000,
-        panelClass: ['success-snackbar']
+        duration: 5000
       });
     }
   }

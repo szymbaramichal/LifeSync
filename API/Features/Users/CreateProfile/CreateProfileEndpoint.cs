@@ -1,6 +1,8 @@
+using API.Data;
 using API.Extensions;
 using API.Messaging;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Features.Users.CreateProfile;
 
@@ -52,9 +54,17 @@ public static class CreateProfileEndpoint
 
 public class CreateProfileRequestValidator : AbstractValidator<CreateProfileRequest>
 {
-    public CreateProfileRequestValidator()
+    public CreateProfileRequestValidator(ApplicationDbContext dbContext)
     {
         RuleFor(x => x.DisplayName)
-            .NotEmpty().WithMessage("Display name is required.");
+            .NotEmpty().WithMessage("Display name is required.")
+            .MustAsync(async (displayName, cancellationToken) =>
+            {
+                var normalized = displayName.Trim();
+
+                return !await dbContext.Users
+                    .AnyAsync(u => u.DisplayName == normalized, cancellationToken);
+            })
+            .WithMessage("Display name is already taken.");
     }
 }

@@ -4,11 +4,11 @@ import { RouterOutlet } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
-  selector: 'app-main-layout',
+  selector: 'app-dashboard-layout',
   imports: [SideBar, RouterOutlet, MatSidenavModule],
-  templateUrl: './main-layout.html',
-  styleUrl: './main-layout.css',
+  templateUrl: './dashboard-layout.html',
+  styleUrl: './dashboard-layout.css',
 })
-export class MainLayout {
+export class DashboardLayout {
 
 }

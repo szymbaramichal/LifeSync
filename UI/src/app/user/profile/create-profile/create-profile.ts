@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ProfileService } from '../profile.service';
 import { Router } from '@angular/router';
 import { CreateProfileRequest } from '../profile.models';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-create-profile',
@@ -23,6 +24,7 @@ import { CreateProfileRequest } from '../profile.models';
 })
 export class CreateProfile {
   private profileService = inject(ProfileService);
+  private snackBar = inject(MatSnackBar);
   private router = inject(Router);
   private fb = inject(FormBuilder);
   isLoading = signal(false);
