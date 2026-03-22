@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using API.Shared;
 
 namespace API.Data.Models;
 
-public class User
+public class User : BaseEntity
 {
-    public Guid Id { get; set; }
-    
     [MaxLength(64)]
     public string FirebaseUID { get; set; } = string.Empty;
     

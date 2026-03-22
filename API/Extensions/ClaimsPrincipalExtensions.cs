@@ -1,12 +1,21 @@
 using System.Security.Claims;
+using API.Shared;
 
 namespace API.Extensions;
 
 public static class ClaimsPrincipalExtensions
 {
-    public static string? GetFirebaseUid(this ClaimsPrincipal user)
+    extension(ClaimsPrincipal user)
     {
-        return user.FindFirst("user_id")?.Value;
+        public string? GetFirebaseUid()
+        {
+            return user.FindFirst(Constants.FirebaseUidClaimType)?.Value;
+        }
+
+        public string? GetAppId()
+        {
+            return user.FindFirst(Constants.UserIdClaimType)?.Value;
+        }
     }
 }
 

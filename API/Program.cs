@@ -6,7 +6,7 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddCustomMediator(typeof(Program).Assembly);
 builder.Services.RegisterAuthentication(builder.Configuration);
 builder.Services.AddCors(builder.Configuration);

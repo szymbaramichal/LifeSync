@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using API.Shared;
 
 namespace API.Data.Models;
 
-public class Expense
+public class Expense : BaseEntity
 {
-    public Guid Id { get; set; }
-    
     public double Amount { get; set; }
     
     [MaxLength(50)]
