@@ -2,7 +2,7 @@ using API.Data;
 using API.Messaging;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Features.Expenses.GetExpenses;
+namespace API.Features.ExpenseGroups.Expenses.GetExpenses;
 
 public sealed record GetExpensesQuery : IRequest<List<GetExpensesResult>>;
 

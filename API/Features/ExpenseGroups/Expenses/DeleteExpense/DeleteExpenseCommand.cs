@@ -2,7 +2,7 @@ using API.Data;
 using API.Messaging;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Features.Expenses.DeleteExpense;
+namespace API.Features.ExpenseGroups.Expenses.DeleteExpense;
 
 public sealed record DeleteExpenseCommand(Guid Id) : IRequest<bool>;
 
@@ -24,4 +24,3 @@ public sealed class DeleteExpenseHandler(ApplicationDbContext dbContext) : IRequ
         return true;
     }
 }
-

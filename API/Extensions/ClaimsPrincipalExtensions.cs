@@ -9,12 +9,15 @@ public static class ClaimsPrincipalExtensions
     {
         public string? GetFirebaseUid()
         {
-            return user.FindFirst(Constants.FirebaseUidClaimType)?.Value;
+            return user.FindFirst(AuthConstants.FirebaseUidClaimType)?.Value;
         }
 
-        public string? GetAppId()
+        public Guid GetUserId()
         {
-            return user.FindFirst(Constants.UserIdClaimType)?.Value;
+            return Guid.Parse(
+                user.FindFirst(AuthConstants.UserIdClaimType)?.Value 
+                ?? throw new InvalidOperationException("User ID claim not found")
+            );     
         }
     }
 }

@@ -1,5 +1,5 @@
 using API.Data.Models;
-using API.Extensions;
+using API.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
@@ -9,6 +9,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> context
 {
     public DbSet<Expense> Expenses { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<ExpenseGroup> ExpenseGroups { get; set; }
+    public DbSet<UserExpenseGroup> UserExpenseGroups { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -24,7 +26,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> context
         var entries = ChangeTracker.Entries()
             .Where(e => e.State is EntityState.Added or EntityState.Modified);
 
-        var textUserId = httpContextAccessor.HttpContext?.User.GetAppId();
+        var textUserId = httpContextAccessor.HttpContext?.User.FindFirst(AuthConstants.FirebaseUidClaimType)?.Value;;
         Guid userId = Guid.TryParse(textUserId, out var parsedUserId) ? parsedUserId : Guid.Empty;
         
         var utcNow = DateTime.UtcNow;

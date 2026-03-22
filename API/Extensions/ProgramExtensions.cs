@@ -5,6 +5,7 @@ using API.Shared;
 using API.Messaging;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -82,16 +83,25 @@ public static class ProgramExtensions
                             return;
                         }
 
-                        if (!identity.HasClaim(c => c.Type == Constants.UserIdClaimType))
+                        if (!identity.HasClaim(c => c.Type == AuthConstants.UserIdClaimType))
                         {
-                            identity.AddClaim(new Claim(Constants.UserIdClaimType, user.Id.ToString()));
+                            identity.AddClaim(new Claim(AuthConstants.UserIdClaimType, user.Id.ToString()));
                         }
                     }
                 };
                 
             });
 
-        services.AddAuthorization();
+        services.AddAuthorization(options =>
+        {
+            options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireClaim(AuthConstants.UserIdClaimType)
+                .Build();
+
+            options.AddPolicy(AuthConstants.AuthenticatedOnlyPolicy, policy =>
+                policy.RequireAuthenticatedUser());
+        });
     }
 
     public static void AddCors(this IServiceCollection services,

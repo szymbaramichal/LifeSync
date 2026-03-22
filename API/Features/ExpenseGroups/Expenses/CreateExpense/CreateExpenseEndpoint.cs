@@ -1,12 +1,12 @@
 using API.Messaging;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
-namespace API.Features.Expenses.CreateExpense;
+namespace API.Features.ExpenseGroups.Expenses.CreateExpense;
+
+public sealed record CreateExpenseRequest(double Amount, string Title, string Description);
 
 public static class CreateExpenseEndpoint
 {
-    private sealed record CreateExpenseRequest(double Amount, string Title, string Description);
-
     public static RouteGroupBuilder MapCreateExpenseEndpoint(this RouteGroupBuilder group)
     {
         group.MapPost("/", HandleAsync)
@@ -19,6 +19,7 @@ public static class CreateExpenseEndpoint
     }
 
     private static async Task<IResult> HandleAsync(
+        [FromRoute] Guid groupId,
         CreateExpenseRequest request,
         IMediator sender,
         CancellationToken cancellationToken)

@@ -1,6 +1,7 @@
 using API.Data;
 using API.Data.Models;
 using API.Messaging;
+using API.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Features.Users.CreateProfile;
@@ -22,14 +23,34 @@ public sealed class CreateProfileHandler(ApplicationDbContext dbContext)
             return null;
         }
 
+        var userId = Guid.CreateVersion7();
         var user = new User
         {
-            Id = Guid.CreateVersion7(),
+            Id = userId,
             FirebaseUID = request.FirebaseUid,
             DisplayName = request.DisplayName.Trim()
         };
 
-        dbContext.Users.Add(user);
+        var expenseGroupId = Guid.CreateVersion7();
+        var expenseGroup = new ExpenseGroup()
+        {
+            Id = expenseGroupId,
+            Name = "Private Expense Group",
+            IsPrivate = true
+        };
+
+        var userExpenseGroup = new UserExpenseGroup()
+        {
+            Id = Guid.CreateVersion7(),
+            ExpenseGroupId = expenseGroupId,
+            UserId = userId,
+            GroupRole = EntityRole.Owner
+        };
+
+        await dbContext.Users.AddAsync(user ,cancellationToken);
+        await dbContext.ExpenseGroups.AddAsync(expenseGroup, cancellationToken);
+        await dbContext.UserExpenseGroups.AddAsync(userExpenseGroup, cancellationToken);
+        
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return new CreateProfileResult(user.Id, user.FirebaseUID, user.DisplayName);

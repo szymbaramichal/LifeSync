@@ -1,13 +1,13 @@
 using API.Messaging;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
-namespace API.Features.Expenses.DeleteExpense;
+namespace API.Features.ExpenseGroups.Expenses.DeleteExpense;
 
 public static class DeleteExpenseEndpoint
 {
     public static RouteGroupBuilder MapDeleteExpenseEndpoint(this RouteGroupBuilder group)
     {
-        group.MapDelete("/{id:guid}", HandleAsync)
+        group.MapDelete("/{expenseId:guid}", HandleAsync)
             .WithName("DeleteExpense")
             .WithSummary("Delete an expense")
             .WithDescription("Deletes an expense by its unique identifier.")
@@ -18,11 +18,12 @@ public static class DeleteExpenseEndpoint
     }
 
     private static async Task<IResult> HandleAsync(
-        Guid id,
+        [FromRoute] Guid expenseId,
+        [FromRoute] Guid groupId,
         IMediator sender,
         CancellationToken cancellationToken)
     {
-        var deleted = await sender.Send(new DeleteExpenseCommand(id), cancellationToken);
+        var deleted = await sender.Send(new DeleteExpenseCommand(expenseId), cancellationToken);
 
         if (!deleted)
         {

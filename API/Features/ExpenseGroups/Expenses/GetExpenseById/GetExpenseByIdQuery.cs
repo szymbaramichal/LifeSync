@@ -2,7 +2,7 @@ using API.Data;
 using API.Messaging;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Features.Expenses.GetExpenseById;
+namespace API.Features.ExpenseGroups.Expenses.GetExpenseById;
 
 public sealed record GetExpenseByIdQuery(Guid Id) : IRequest<GetExpenseByIdResult?>;
 
@@ -18,7 +18,7 @@ public sealed class GetExpenseByIdHandler(ApplicationDbContext dbContext) : IReq
 
         if (expense is null)
             return null;
-        
+
         return new GetExpenseByIdResult(
             expense.Id,
             expense.Amount,

@@ -13,7 +13,8 @@ public static class MeEndpoint
             .WithDescription("Returns the profile of the authenticated Firebase user.")
             .Produces<MeResult>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized)
-            .Produces(StatusCodes.Status404NotFound);
+            .Produces(StatusCodes.Status403Forbidden)
+            .RequireAuthorization();
 
         return group;
     }

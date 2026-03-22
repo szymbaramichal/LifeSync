@@ -1,6 +1,7 @@
 using API.Messaging;
+using Microsoft.AspNetCore.Mvc;
 
-namespace API.Features.Expenses.GetExpenses;
+namespace API.Features.ExpenseGroups.Expenses.GetExpenses;
 
 public static class GetExpensesEndpoint
 {
@@ -16,6 +17,7 @@ public static class GetExpensesEndpoint
     }
 
     private static async Task<IResult> HandleAsync(
+        [FromRoute] Guid groupId,
         IMediator sender,
         CancellationToken cancellationToken)
     {

@@ -1,14 +1,15 @@
 using API.Messaging;
+using Microsoft.AspNetCore.Mvc;
 
-namespace API.Features.Expenses.UpdateExpense;
+namespace API.Features.ExpenseGroups.Expenses.UpdateExpense;
 
 public static class UpdateExpenseEndpoint
 {
     public sealed record UpdateExpenseRequest(double Amount, string Title, string Description);
-    
+
     public static RouteGroupBuilder MapUpdateExpenseEndpoint(this RouteGroupBuilder group)
     {
-        group.MapPut("/{id:guid}", HandleAsync)
+        group.MapPut("/{expenseId:guid}", HandleAsync)
             .WithName("UpdateExpense")
             .WithSummary("Update an expense")
             .WithDescription("Updates an existing expense by its unique identifier.")
@@ -19,13 +20,14 @@ public static class UpdateExpenseEndpoint
     }
 
     private static async Task<IResult> HandleAsync(
-        Guid id,
+        [FromRoute] Guid expenseId,
+        [FromRoute] Guid groupId,
         UpdateExpenseRequest request,
         IMediator sender,
         CancellationToken cancellationToken)
     {
         var result = await sender.Send(
-            new UpdateExpenseCommand(id, request.Amount, request.Title, request.Description),
+            new UpdateExpenseCommand(expenseId, request.Amount, request.Title, request.Description),
             cancellationToken);
 
         if (result is null)

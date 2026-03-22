@@ -35,10 +35,6 @@ export class Register {
     confirmPassword: ['', [Validators.required]],
   }, { validators: passwordMatchValidator });
 
-  constructor() {
-    console.log(this.registerForm)
-  }
-
   private authService = inject(AuthService);
 
   async register() {

@@ -1,5 +1,5 @@
 using API.Extensions;
-using API.Features.Expenses;
+using API.Features.ExpenseGroups;
 using API.Features.Users;
 using Scalar.AspNetCore;
 
@@ -29,7 +29,7 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapExpenseEndpoints();
+app.MapExpenseGroupEndpoints();
 app.MapUserEndpoints();
 
 app.Run();

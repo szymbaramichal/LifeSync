@@ -2,7 +2,7 @@ using API.Data;
 using API.Data.Models;
 using API.Messaging;
 
-namespace API.Features.Expenses.CreateExpense;
+namespace API.Features.ExpenseGroups.Expenses.CreateExpense;
 
 public sealed record CreateExpenseCommand(double Amount, string Title, string Description) : IRequest<CreateExpenseResult>;
 
@@ -30,4 +30,3 @@ public sealed class CreateExpenseHandler(ApplicationDbContext dbContext) : IRequ
         return new CreateExpenseResult(expense.Id, expense.Amount, expense.Title, expense.Description);
     }
 }
-

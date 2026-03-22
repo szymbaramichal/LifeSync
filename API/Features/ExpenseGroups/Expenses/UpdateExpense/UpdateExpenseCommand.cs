@@ -2,7 +2,7 @@ using API.Data;
 using API.Messaging;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Features.Expenses.UpdateExpense;
+namespace API.Features.ExpenseGroups.Expenses.UpdateExpense;
 
 public sealed record UpdateExpenseCommand(Guid Id, double Amount, string Title, string Description) : IRequest<UpdateExpenseResult?>;
 
@@ -29,4 +29,3 @@ public sealed class UpdateExpenseHandler(ApplicationDbContext dbContext) : IRequ
         return new UpdateExpenseResult(expense.Id, expense.Amount, expense.Title, expense.Description);
     }
 }
-
