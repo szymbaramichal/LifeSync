@@ -25,7 +25,13 @@ User can exist in many expenses group with friends. When setting up account - us
 * **UI Features:**
   * **Expense Management:** Interfaces integrated into the dashboard to add, view, edit, and delete daily expenses.
 
-### 4. Dashboard Domain
+### 4. Expense Groups Domain
+Manages shared and private expense groups where users can collaborate, split bills, and track joint expenditures.
+* **UI Features:**
+  * **Group Selection:** A dropdown selector in the dashboard to change the active expense group.
+  * **Group Management:** Interfaces to create new groups, manage members, and view group-specific details.
+
+### 5. Dashboard Domain
 The central hub for users to get an overview of their LifeSync data.
 * **UI Features:**
   * **Main Dashboard:** The primary authenticated view (`/dashboard`) summarizing key metrics, recent expenses, and quick actions.
