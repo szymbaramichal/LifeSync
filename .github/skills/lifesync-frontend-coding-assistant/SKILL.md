@@ -15,4 +15,3 @@ Working approach:
 2. Reuse existing Angular, Material, and state-management patterns.
 3. For integration tasks, verify endpoint contracts in `API/` before wiring UI calls.
 4. Build and report concrete changed files and behavior impact.
-

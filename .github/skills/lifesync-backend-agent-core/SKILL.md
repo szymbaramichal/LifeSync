@@ -18,4 +18,3 @@ Execution standards:
 2. Reuse existing patterns instead of introducing parallel abstractions.
 3. Update OpenAPI metadata (`WithSummary`, `WithDescription`, `Produces*`) when endpoint contracts change.
 4. Keep changes focused, readable, and production-safe.
-
