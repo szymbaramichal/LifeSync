@@ -33,7 +33,6 @@ Execution checklist per issue:
 - Keep UI state with signal/form state consistent
 - Reuse existing UX patterns (snackbar, loading, guards)
 - Add/update templates + TS + route wiring as needed
-- Build UI (and tests when impacted)
 
 Done criteria:
 - Issue scope fully implemented
