@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { CreateExpenseRequest, ExpenseDto, ExpenseGroupDto } from './expenses.models';
+import { CreateExpenseRequest, ExpenseDto, ExpenseGroupDto, UpdateExpenseRequest } from './expenses.models';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +25,19 @@ export class ExpensesService {
     return this.httpClient.post<ExpenseDto>(
       this.baseUrl + '/api/expense-groups/' + groupId + '/expenses',
       request
+    );
+  }
+
+  updateExpense(groupId: string, expenseId: string, request: UpdateExpenseRequest): Observable<ExpenseDto> {
+    return this.httpClient.put<ExpenseDto>(
+      this.baseUrl + '/api/expense-groups/' + groupId + '/expenses/' + expenseId,
+      request
+    );
+  }
+
+  deleteExpense(groupId: string, expenseId: string): Observable<void> {
+    return this.httpClient.delete<void>(
+      this.baseUrl + '/api/expense-groups/' + groupId + '/expenses/' + expenseId
     );
   }
 }

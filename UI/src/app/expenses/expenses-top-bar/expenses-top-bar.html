@@ -1,1 +1,11 @@
-<p>expenses-top-bar works!</p>
+<mat-form-field>
+  <mat-label>Select expense group</mat-label>
+  <mat-select
+    [(ngModel)]="selectedExpenseGroupId"
+    (ngModelChange)="onSelectedExpenseGroupIdChange($event)"
+  >
+    @for(group of expenseGroupStore.groups(); track group.id) {
+      <mat-option [value]="group.id">{{ group.name }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>

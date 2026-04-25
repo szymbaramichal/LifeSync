@@ -1,1 +1,9 @@
-<p>expenses-list works!</p>
+@if (!groupId) {
+  <p>Select an expense group to see expenses.</p>
+} @else if (expenses().length === 0) {
+  <p>No expenses in this group yet.</p>
+} @else {
+  @for (expense of expenses(); track expense.id) {
+    <p>{{ expense.title }} - {{ expense.amount }}</p>
+  }
+}

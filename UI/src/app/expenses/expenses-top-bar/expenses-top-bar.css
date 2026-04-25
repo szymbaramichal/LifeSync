@@ -1,3 +1,10 @@
 :host {
- background-color: red;
-}
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin-top: 10px
+ }
+
+ mat-form-field {
+   width: 300px;
+ }
