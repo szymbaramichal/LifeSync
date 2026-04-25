@@ -1,5 +1,7 @@
-<h2 routerLink="/dashboard" style="text-align: center;">Life sync</h2>
+<h2 routerLink="/dashboard" style="text-align: center;" (click)="onNavigationClick()">Life sync</h2>
 
 <ul>
-  <li routerLink="/dashboard/expenses"><mat-icon>attach_money</mat-icon> Expenses</li>
+  <li routerLink="/dashboard/expenses" (click)="onNavigationClick()">
+    <mat-icon>attach_money</mat-icon> Expenses
+  </li>
 </ul>

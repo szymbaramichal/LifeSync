@@ -1,9 +1,26 @@
 <mat-sidenav-container class="app-container">
-  <mat-sidenav mode="side" opened class="sidebar">
-    <app-side-bar />
+  <mat-sidenav
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="isSidebarOpened()"
+    (openedChange)="onSidebarOpenedChange($event)"
+    class="sidebar"
+  >
+    <app-side-bar (navigationClick)="closeSidebarOnMobile()" />
   </mat-sidenav>
 
   <mat-sidenav-content>
+    @if(isMobile())
+    {
+      <button
+        mat-icon-button
+        type="button"
+        class="menu-button"
+        aria-label="Open navigation menu"
+        (click)="toggleSidebar()"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+    }
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

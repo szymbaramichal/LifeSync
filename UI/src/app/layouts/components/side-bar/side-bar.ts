@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 
@@ -9,5 +9,9 @@ import { RouterLink } from '@angular/router';
   styleUrl: './side-bar.css',
 })
 export class SideBar {
+  @Output() navigationClick = new EventEmitter<void>();
 
+  onNavigationClick(): void {
+    this.navigationClick.emit();
+  }
 }
