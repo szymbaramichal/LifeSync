@@ -18,11 +18,11 @@
     <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" type="button" [attr.aria-label]="'Hide confirm password'" [attr.aria-pressed]="hideConfirmPassword">
       <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
     </button>
-  </mat-form-field>
 
-  @if (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched){
-    <mat-error>Passwords do not match</mat-error>
-  }
+    @if (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched){
+      <mat-error>Passwords do not match</mat-error>
+    }
+  </mat-form-field>
 
   <button mat-raised-button color="primary" type="submit" [disabled]="registerForm.invalid">Register</button>
 </form>

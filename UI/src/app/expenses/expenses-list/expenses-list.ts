@@ -11,6 +11,7 @@ import { ExpensesService } from '../expenses.service';
 })
 export class ExpensesList implements OnChanges {
   @Input() groupId: string | null = null;
+  @Input() refreshVersion = 0;
 
   private destroyRef = inject(DestroyRef);
   private expensesService = inject(ExpensesService);
@@ -18,7 +19,7 @@ export class ExpensesList implements OnChanges {
   expenses = signal<ExpenseDto[]>([]);
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!changes['groupId']) {
+    if (!changes['groupId'] && !changes['refreshVersion']) {
       return;
     }
 

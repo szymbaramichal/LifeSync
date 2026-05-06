@@ -1,1 +1,28 @@
-<p>expenses-upsert works!</p>
+@if(isEditMode())
+{
+  <p>Edit expense</p>
+}
+@else
+{
+  <p>Add expense</p>
+}
+
+<form [formGroup]="form" style="display: flex; flex-direction: column;" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <mat-label>Title</mat-label>
+    <input matInput name="title" formControlName="title">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Amount</mat-label>
+    <input matInput name="amount" type="number" formControlName="amount">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <input matInput name="description" formControlName="description">
+  </mat-form-field>
+
+  <div>
+    <button matButton="filled" type="submit">Save</button>
+    <button matButton="outlined" type="reset">Reset</button>
+  </div>
+</form>
