@@ -16,12 +16,7 @@ public sealed class MeHandler(ApplicationDbContext dbContext) : IRequestHandler<
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.FirebaseUID == request.FirebaseUid, cancellationToken);
 
-        if (user is null)
-        {
-            return null;
-        }
-
-        return new MeResult(user.Id, user.FirebaseUID, user.DisplayName);
+        return user is null ? null : new MeResult(user.Id, user.FirebaseUID, user.DisplayName);
     }
 }
 

@@ -1,8 +1,11 @@
 using System.Reflection;
+using System.Security.Claims;
 using API.Data;
+using API.Shared;
 using API.Messaging;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -32,7 +35,6 @@ public static class ProgramExtensions
         IConfiguration configuration)
     {
         var firebase = configuration.GetSection("Firebase");
-        var projectId = firebase["ProjectId"];
         var authority = firebase["Authority"];
         var audience = firebase["Audience"];
 
@@ -50,9 +52,56 @@ public static class ProgramExtensions
                     ValidAudience = audience,
                     ValidateLifetime = true
                 };
+                
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = async context =>
+                    {
+                        var principal = context.Principal;
+                        var firebaseUid = principal?.GetFirebaseUid();
+
+                        if (string.IsNullOrWhiteSpace(firebaseUid))
+                        {
+                            context.Fail("Invalid token: Missing user_id claim.");
+                            return;
+                        }
+
+                        var dbContext = context.HttpContext.RequestServices.GetRequiredService<ApplicationDbContext>();
+                        var user = await dbContext.Users
+                            .AsNoTracking()
+                            .SingleOrDefaultAsync(u => u.FirebaseUID == firebaseUid, context.HttpContext.RequestAborted);
+
+                        // Valid Firebase token without local profile is allowed (e.g. profile creation flow).
+                        if (user is null)
+                        {
+                            return;
+                        }
+
+                        if (principal?.Identity is not ClaimsIdentity identity)
+                        {
+                            context.Fail("Invalid token principal identity.");
+                            return;
+                        }
+
+                        if (!identity.HasClaim(c => c.Type == AuthConstants.UserIdClaimType))
+                        {
+                            identity.AddClaim(new Claim(AuthConstants.UserIdClaimType, user.Id.ToString()));
+                        }
+                    }
+                };
+                
             });
 
-        services.AddAuthorization();
+        services.AddAuthorization(options =>
+        {
+            options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireClaim(AuthConstants.UserIdClaimType)
+                .Build();
+
+            options.AddPolicy(AuthConstants.AuthenticatedOnlyPolicy, policy =>
+                policy.RequireAuthenticatedUser());
+        });
     }
 
     public static void AddCors(this IServiceCollection services,

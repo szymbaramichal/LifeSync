@@ -15,4 +15,3 @@ Working approach:
 2. Reuse existing endpoint + mediator + DTO + auth patterns.
 3. Keep ownership/security checks and API behavior explicit.
 4. Build and report concrete changed files and behavior impact.
-

@@ -1,12 +1,24 @@
 using System.Security.Claims;
+using API.Shared;
 
 namespace API.Extensions;
 
 public static class ClaimsPrincipalExtensions
 {
-    public static string? GetFirebaseUid(this ClaimsPrincipal user)
+    extension(ClaimsPrincipal user)
     {
-        return user.FindFirst("user_id")?.Value;
+        public string? GetFirebaseUid()
+        {
+            return user.FindFirst(AuthConstants.FirebaseUidClaimType)?.Value;
+        }
+
+        public Guid GetUserId()
+        {
+            return Guid.Parse(
+                user.FindFirst(AuthConstants.UserIdClaimType)?.Value 
+                ?? throw new InvalidOperationException("User ID claim not found")
+            );     
+        }
     }
 }
 

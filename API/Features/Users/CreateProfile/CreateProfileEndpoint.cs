@@ -1,6 +1,7 @@
 using API.Data;
 using API.Extensions;
 using API.Messaging;
+using API.Shared;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,8 @@ public static class CreateProfileEndpoint
             .WithDescription("Creates a profile for the authenticated Firebase user.")
             .Produces<CreateProfileResult>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status401Unauthorized)
-            .Produces(StatusCodes.Status409Conflict);
+            .Produces(StatusCodes.Status409Conflict)
+            .RequireAuthorization(AuthConstants.AuthenticatedOnlyPolicy);
 
         return group;
     }

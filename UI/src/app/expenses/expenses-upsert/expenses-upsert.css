@@ -1,0 +1,17 @@
+mat-form-field {
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 15px;
+}
+
+p {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+div {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}

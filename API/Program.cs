@@ -1,12 +1,12 @@
 using API.Extensions;
-using API.Features.Expenses;
+using API.Features.ExpenseGroups;
 using API.Features.Users;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddCustomMediator(typeof(Program).Assembly);
 builder.Services.RegisterAuthentication(builder.Configuration);
 builder.Services.AddCors(builder.Configuration);
@@ -29,7 +29,7 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapExpenseEndpoints();
+app.MapExpenseGroupEndpoints();
 app.MapUserEndpoints();
 
 app.Run();

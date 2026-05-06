@@ -9,6 +9,7 @@ import { Dashboard } from './dashboard/dashboard';
 import { meResolver } from './core/resolvers/me.resolver';
 import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
 import { GuestLayout } from './layouts/guest-layout/guest-layout';
+import { ExpensesDashboard } from './expenses/expenses-dashboard/expenses-dashboard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -25,8 +26,8 @@ export const routes: Routes = [
     component: DashboardLayout,
     canActivate: [authGuard],
     children: [
-      { path: '', component: Dashboard },
-      { path: 'me', component: Me, resolve: { me: meResolver } },
+      { path: '', component: Me, resolve: { me: meResolver } },
+      { path: 'expenses', component: ExpensesDashboard }
     ]
   },
   { path: '**', component: NotFound  },

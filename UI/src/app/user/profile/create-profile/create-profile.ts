@@ -46,7 +46,7 @@ export class CreateProfile {
           this.isLoading.set(false);
           this.profileForm.reset();
           this.snackBar.open('Profile created successfully', 'Close', { duration: 3000 });
-          this.router.navigate(['/dashboard/me']);
+          this.router.navigate(['/dashboard']);
         },
         error: () => {
           this.isLoading.set(false);
