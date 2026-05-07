@@ -38,7 +38,7 @@ export class Login {
     }
     else {
       this.formDirective.resetForm();
-      this.router.navigate(['/dashboard/me']);
+      this.router.navigate(['/dashboard']);
     }
   }
 }
