@@ -1,9 +1,9 @@
 using Reqnroll;
 using Reqnroll.BoDi;
-using UITests.Dsl;
-using UITests.Infrastructure;
+using UI.Tests.Dsl;
+using UI.Tests.Infrastructure;
 
-namespace UITests.Steps;
+namespace UI.Tests.Steps;
 
 [Binding]
 public sealed class DependencyRegistrationHooks

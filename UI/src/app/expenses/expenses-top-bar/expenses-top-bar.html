@@ -4,8 +4,10 @@
     [(ngModel)]="selectedExpenseGroupId"
     (ngModelChange)="onSelectedExpenseGroupIdChange($event)"
   >
-    @for(group of expenseGroupStore.groups(); track group.id) {
-      <mat-option [value]="group.id">{{ group.name }}</mat-option>
-    }
+    <mat-optgroup [label]="">
+      @for(group of expenseGroupStore.groups(); track group.id) {
+        <mat-option [value]="group.id">{{ group.name }}</mat-option>
+      }
+    </mat-optgroup>
   </mat-select>
 </mat-form-field>

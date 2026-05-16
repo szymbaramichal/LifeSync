@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace UITests.Infrastructure;
+namespace UI.Tests.Infrastructure;
 
 public sealed class LoginCredentialsProvider
 {

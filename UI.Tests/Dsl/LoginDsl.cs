@@ -1,8 +1,8 @@
 using System.Text.RegularExpressions;
 using Microsoft.Playwright;
-using UITests.Infrastructure;
+using UI.Tests.Infrastructure;
 
-namespace UITests.Dsl;
+namespace UI.Tests.Dsl;
 
 public sealed class LoginDsl(BrowserSession browserSession)
 {
