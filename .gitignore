@@ -52,6 +52,7 @@ x86/
 *.sln.docstates
 .vs/
 *.db
+*.feature.cs
 
 # Test results / coverage (.NET)
 TestResults/
