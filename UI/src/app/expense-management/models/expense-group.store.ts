@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { ExpensesService } from './expenses.service';
+import { ExpensesService } from '../services/expenses.service';
 import { ExpenseGroupDto } from './expenses.models';
 
 @Injectable({

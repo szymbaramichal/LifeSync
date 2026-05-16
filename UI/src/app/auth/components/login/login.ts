@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormGroupDirective, ReactiveFormsModule, Valida
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatIcon } from "@angular/material/icon";

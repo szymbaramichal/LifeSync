@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, Input, OnChanges, SimpleChanges, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ExpenseDto } from '../expenses.models';
-import { ExpensesService } from '../expenses.service';
+import { ExpenseDto } from '../../../models/expenses.models';
+import { ExpensesService } from '../../../services/expenses.service';
 
 @Component({
   selector: 'app-expenses-list',

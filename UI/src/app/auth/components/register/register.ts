@@ -13,7 +13,7 @@ export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): V
     ? { passwordMismatch: true }
     : null;
 };
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',

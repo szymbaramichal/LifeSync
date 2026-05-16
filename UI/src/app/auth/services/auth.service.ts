@@ -10,9 +10,9 @@ import {
   Auth,
   sendEmailVerification,
 } from 'firebase/auth';
-import { environment } from '../../environments/environment';
-import { AuthResultDto } from './auth.models';
-import { LoadingService } from '../core/services/loading.service';
+import { environment } from '../../../environments/environment';
+import { AuthResultDto } from '../models/auth.models';
+import { LoadingService } from '../../core/services/loading.service';
 
 @Injectable({
   providedIn: 'root'

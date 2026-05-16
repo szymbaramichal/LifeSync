@@ -1,10 +1,11 @@
-import { Component, inject, input, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, input, signal, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatFormField, MatLabel } from "@angular/material/form-field";
 import { MatInput } from '@angular/material/input';
-import { CreateExpenseRequest } from '../expenses.models';
-import { ExpensesService } from '../expenses.service';
+import { CreateExpenseRequest } from '../../../models/expenses.models';
+import { ExpensesService } from '../../../services/expenses.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-expenses-upsert',
@@ -14,8 +15,11 @@ import { ExpensesService } from '../expenses.service';
 })
 export class ExpensesUpsert {
   private expensesService = inject(ExpensesService);
+  private snackBar = inject(MatSnackBar);
   expenseGroupId = input<string>('');
   isEditMode = signal<boolean>(false);
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
+
 
   form = new FormGroup({
     title: new FormControl('', [Validators.required]),
@@ -34,6 +38,13 @@ export class ExpensesUpsert {
       amount: expense.amount!,
       description: expense.description!,
     };
-    this.expensesService.createExpense(this.expenseGroupId(), request).subscribe();
+    this.expensesService.createExpense(this.expenseGroupId(), request).subscribe({
+      next: () => {
+        this.formDirective.resetForm();
+        this.snackBar.open('Expense added!', 'Close', {
+          duration: 5000,
+        });
+      }
+    });
   }
 }

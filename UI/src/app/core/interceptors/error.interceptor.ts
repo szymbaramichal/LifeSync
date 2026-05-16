@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
-import { AuthService } from '../../auth/auth.service';
+import { AuthService } from '../../auth/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -16,6 +16,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     });
   };
 
+  const showNotFoundError = () => {
+    snackBar.open('Resource not found. Please try again.', 'Close', {
+      duration: 5000
+    });
+  };
+
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
@@ -24,6 +30,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       }
       else if (error.status === 403) {
         router.navigate(['/create-profile']);
+      }
+      else if (error.status === 404) {
+        showNotFoundError();
       }
       else if (error.status === 422) {
         const errors = error?.error?.errors;

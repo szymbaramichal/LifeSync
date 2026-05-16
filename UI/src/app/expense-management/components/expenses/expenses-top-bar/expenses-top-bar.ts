@@ -3,7 +3,7 @@ import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from "@angular/material/input";
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { ExpenseGroupStore } from '../expense-group.store';
+import { ExpenseGroupStore } from '../../../models/expense-group.store';
 
 @Component({
   selector: 'app-expenses-top-bar',

@@ -1,13 +1,18 @@
 <mat-form-field>
   <mat-label>Select expense group</mat-label>
   <mat-select
+    panelClass="expenses-group-select-panel"
     [(ngModel)]="selectedExpenseGroupId"
     (ngModelChange)="onSelectedExpenseGroupIdChange($event)"
   >
-    <mat-optgroup [label]="">
+    <mat-optgroup label="Expense groups">
       @for(group of expenseGroupStore.groups(); track group.id) {
         <mat-option [value]="group.id">{{ group.name }}</mat-option>
       }
+    </mat-optgroup>
+    <mat-optgroup label="Create / Join group" class="group-actions-optgroup">
+      <mat-option value="create">Create expense group</mat-option>
+      <mat-option value="join">Join expense group</mat-option>
     </mat-optgroup>
   </mat-select>
 </mat-form-field>
