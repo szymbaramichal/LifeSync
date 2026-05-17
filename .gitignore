@@ -56,6 +56,8 @@ x86/
 *.feature.cs
 *.db-shm
 *.db-wal
+API/appsettings.Development.json
+UI.Tests/appsettings.json
 
 # Test results / coverage (.NET)
 TestResults/
