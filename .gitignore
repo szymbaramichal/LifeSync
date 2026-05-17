@@ -54,6 +54,8 @@ x86/
 .vs/
 *.db
 *.feature.cs
+*.db-shm
+*.db-wal
 
 # Test results / coverage (.NET)
 TestResults/
