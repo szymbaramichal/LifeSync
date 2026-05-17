@@ -3,6 +3,8 @@ using API.Features.ExpenseGroups.DeleteExpenseGroup;
 using API.Features.ExpenseGroups.Expenses;
 using API.Features.ExpenseGroups.GetExpenseGroupById;
 using API.Features.ExpenseGroups.GetExpenseGroups;
+using API.Features.ExpenseGroups.InviteToExpenseGroup;
+using API.Features.ExpenseGroups.RemoveUserFromExpenseGroup;
 using API.Features.ExpenseGroups.UpdateExpenseGroup;
 
 namespace API.Features.ExpenseGroups;
@@ -20,6 +22,8 @@ public static class ExpenseGroupEndpoints
         groups.MapGetExpenseGroupByIdEndpoint();
         groups.MapUpdateExpenseGroupEndpoint();
         groups.MapDeleteExpenseGroupEndpoint();
+        groups.MapInviteToExpenseGroupEndpoint();
+        groups.MapRemoveUserFromExpenseGroupEndpoint();
 
         var groupById = groups.MapGroup("/{groupId:guid}");
         groupById.MapExpenseGroupExpenseEndpoints();

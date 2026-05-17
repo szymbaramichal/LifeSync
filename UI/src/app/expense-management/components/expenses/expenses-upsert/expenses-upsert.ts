@@ -20,7 +20,6 @@ export class ExpensesUpsert {
   isEditMode = signal<boolean>(false);
   @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
 
-
   form = new FormGroup({
     title: new FormControl('', [Validators.required]),
     amount: new FormControl(0.0, [Validators.required]),
@@ -38,6 +37,7 @@ export class ExpensesUpsert {
       amount: expense.amount!,
       description: expense.description!,
     };
+
     this.expensesService.createExpense(this.expenseGroupId(), request).subscribe({
       next: () => {
         this.formDirective.resetForm();

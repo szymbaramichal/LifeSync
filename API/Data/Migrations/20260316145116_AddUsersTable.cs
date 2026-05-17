@@ -17,7 +17,7 @@ namespace API.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     FirebaseUID = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false),
-                    DisplayName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
+                    Username = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {

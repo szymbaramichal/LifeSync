@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Features.Users.CreateProfile;
 
-public sealed record CreateProfileRequest(string DisplayName);
+public sealed record CreateProfileRequest(string Username);
 
 public static class CreateProfileEndpoint
 {
@@ -33,16 +33,16 @@ public static class CreateProfileEndpoint
         CancellationToken cancellationToken)
     {
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
-        
+
         if (!validationResult.IsValid)
-        {            
+        {
             return TypedResults.UnprocessableEntity(validationResult);
         }
-        
+
         var firebaseUid = httpContext.User.GetFirebaseUid();
-        
+
         var result = await sender.Send(
-            new CreateProfileCommand(firebaseUid!, request.DisplayName),
+            new CreateProfileCommand(firebaseUid!, request.Username),
             cancellationToken);
 
         if (result is null)
@@ -58,14 +58,14 @@ public class CreateProfileRequestValidator : AbstractValidator<CreateProfileRequ
 {
     public CreateProfileRequestValidator(ApplicationDbContext dbContext)
     {
-        RuleFor(x => x.DisplayName)
+        RuleFor(x => x.Username)
             .NotEmpty().WithMessage("Display name is required.")
-            .MustAsync(async (displayName, cancellationToken) =>
+            .MustAsync(async (username, cancellationToken) =>
             {
-                var normalized = displayName.Trim();
+                var normalized = username.Trim();
 
                 return !await dbContext.Users
-                    .AnyAsync(u => u.DisplayName == normalized, cancellationToken);
+                    .AnyAsync(u => u.Username == normalized, cancellationToken);
             })
             .WithMessage("Display name is already taken.");
     }

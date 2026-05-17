@@ -99,7 +99,7 @@ namespace API.Data.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("DisplayName")
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");

@@ -3,10 +3,10 @@ import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from "@angular/material/input";
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { ExpenseGroupStore } from '../../../models/expense-group.store';
+import { ExpenseGroupStore } from '../../../expense-group.store';
 
 @Component({
-  selector: 'app-expenses-top-bar',
+  selector: 'app-group-selector',
   imports: [
     MatSelect,
     MatInputModule,
@@ -14,10 +14,10 @@ import { ExpenseGroupStore } from '../../../models/expense-group.store';
     FormsModule,
     MatFormFieldModule,
   ],
-  templateUrl: './expenses-top-bar.html',
-  styleUrl: './expenses-top-bar.css',
+  templateUrl: './group-selector.html',
+  styleUrl: './group-selector.css',
 })
-export class ExpensesTopBar implements OnInit {
+export class GroupSelector implements OnInit {
   expenseGroupChanged = output<string>();
   expenseGroupStore = inject(ExpenseGroupStore);
 

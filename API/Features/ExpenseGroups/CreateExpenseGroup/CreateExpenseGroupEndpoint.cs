@@ -3,7 +3,7 @@ using API.Messaging;
 
 namespace API.Features.ExpenseGroups.CreateExpenseGroup;
 
-public sealed record CreateExpenseGroupRequest(string Name, bool IsPrivate);
+public sealed record CreateExpenseGroupRequest(string Name);
 
 public static class CreateExpenseGroupEndpoint
 {
@@ -28,10 +28,9 @@ public static class CreateExpenseGroupEndpoint
         var userId = httpContext.User.GetUserId();
 
         var result = await sender.Send(
-            new CreateExpenseGroupCommand(userId, request.Name, request.IsPrivate),
+            new CreateExpenseGroupCommand(userId, request.Name),
             cancellationToken);
 
         return TypedResults.Created($"/api/expense-groups/{result.Id}", result);
     }
 }
-

@@ -1,12 +1,12 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { ExpensesService } from '../services/expenses.service';
-import { ExpenseGroupDto } from './expenses.models';
+import { ExpenseGroupsService } from './services/expense-groups.service';
+import { ExpenseGroupDto } from './models/expense-groups.models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExpenseGroupStore {
-  private expenseService = inject(ExpensesService);
+  private expenseGroupsService = inject(ExpenseGroupsService);
   private loading = false;
   private loaded = false;
 
@@ -16,7 +16,7 @@ export class ExpenseGroupStore {
     if (this.loaded || this.loading) return;
 
     this.loading = true;
-    this.expenseService.getExpenseGroups().subscribe(groups => {
+    this.expenseGroupsService.getExpenseGroups().subscribe(groups => {
       this.groups.set(groups);
       this.loading = false;
       this.loaded = true;

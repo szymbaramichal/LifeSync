@@ -5,10 +5,10 @@ using API.Shared;
 
 namespace API.Features.ExpenseGroups.CreateExpenseGroup;
 
-public sealed record CreateExpenseGroupCommand(Guid UserId, string Name, bool IsPrivate)
+public sealed record CreateExpenseGroupCommand(Guid UserId, string Name)
     : IRequest<CreateExpenseGroupResult>;
 
-public sealed record CreateExpenseGroupResult(Guid Id, string Name, bool IsPrivate);
+public sealed record CreateExpenseGroupResult(Guid Id, string Name, bool IsPrivate, EntityRole GroupRole);
 
 public sealed class CreateExpenseGroupHandler(ApplicationDbContext dbContext)
     : IRequestHandler<CreateExpenseGroupCommand, CreateExpenseGroupResult>
@@ -21,7 +21,7 @@ public sealed class CreateExpenseGroupHandler(ApplicationDbContext dbContext)
         {
             Id = groupId,
             Name = request.Name.Trim(),
-            IsPrivate = request.IsPrivate
+            IsPrivate = false
         };
 
         var userExpenseGroup = new UserExpenseGroup
@@ -36,7 +36,6 @@ public sealed class CreateExpenseGroupHandler(ApplicationDbContext dbContext)
         await dbContext.UserExpenseGroups.AddAsync(userExpenseGroup, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return new CreateExpenseGroupResult(expenseGroup.Id, expenseGroup.Name, expenseGroup.IsPrivate);
+        return new CreateExpenseGroupResult(expenseGroup.Id, expenseGroup.Name, expenseGroup.IsPrivate, EntityRole.Owner);
     }
 }
-

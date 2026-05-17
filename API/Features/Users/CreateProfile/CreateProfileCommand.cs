@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Features.Users.CreateProfile;
 
-public sealed record CreateProfileCommand(string FirebaseUid, string DisplayName) : IRequest<CreateProfileResult?>;
+public sealed record CreateProfileCommand(string FirebaseUid, string Username) : IRequest<CreateProfileResult?>;
 
-public sealed record CreateProfileResult(Guid Id, string FirebaseUid, string DisplayName);
+public sealed record CreateProfileResult(Guid Id, string FirebaseUid, string Username);
 
 public sealed class CreateProfileHandler(ApplicationDbContext dbContext)
     : IRequestHandler<CreateProfileCommand, CreateProfileResult?>
@@ -28,7 +28,7 @@ public sealed class CreateProfileHandler(ApplicationDbContext dbContext)
         {
             Id = userId,
             FirebaseUID = request.FirebaseUid,
-            DisplayName = request.DisplayName.Trim()
+            Username = request.Username.Trim()
         };
 
         var expenseGroupId = Guid.CreateVersion7();
@@ -50,10 +50,9 @@ public sealed class CreateProfileHandler(ApplicationDbContext dbContext)
         await dbContext.Users.AddAsync(user ,cancellationToken);
         await dbContext.ExpenseGroups.AddAsync(expenseGroup, cancellationToken);
         await dbContext.UserExpenseGroups.AddAsync(userExpenseGroup, cancellationToken);
-        
+
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return new CreateProfileResult(user.Id, user.FirebaseUID, user.DisplayName);
+        return new CreateProfileResult(user.Id, user.FirebaseUID, user.Username);
     }
 }
-

@@ -7,7 +7,7 @@ public class User : BaseEntity
 {
     [MaxLength(64)]
     public string FirebaseUID { get; set; } = string.Empty;
-    
+
     [MaxLength(50)]
-    public string DisplayName { get; set; } =  string.Empty;
+    public string Username { get; set; } =  string.Empty;
 }

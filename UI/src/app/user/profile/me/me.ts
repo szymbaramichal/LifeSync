@@ -9,11 +9,11 @@ import { MeDto } from '../profile.models';
 })
 export class Me {
   me = input.required<MeDto>();
-  displayName = '';
+  username = '';
 
   constructor() {
     afterNextRender(() => {
-      this.displayName = this.me().displayName;
+      this.username = this.me().username;
     });
   }
 }

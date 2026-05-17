@@ -1,0 +1,9 @@
+.top-bar-container {
+  max-width: 650px;
+  width: 100%;
+  margin: 0.75rem auto 0 auto;
+}
+
+.top-bar-container mat-form-field {
+  width: 100%;
+}

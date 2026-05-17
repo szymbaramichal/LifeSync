@@ -1,0 +1,19 @@
+.create-container {
+  max-width: 575px;
+  margin: 2rem auto;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+h1 {
+  text-align: center;
+}
+
+h3 {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 100;
+}

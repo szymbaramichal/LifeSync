@@ -11,4 +11,6 @@ public class UserExpenseGroup : BaseEntity
     public Guid UserId { get; set; }
 
     public EntityRole GroupRole { get; set; }
+
+    public bool IsPendingInvitation { get; set; } = false;
 }

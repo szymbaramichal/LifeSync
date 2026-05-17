@@ -7,11 +7,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabChangeEvent, MatTabGroup, MatTab } from '@angular/material/tabs';
-import { ExpensesTopBar } from "../../components/expenses/expenses-top-bar/expenses-top-bar";
+import { GroupSelector } from "../../components/groups/group-selector/group-selector";
 import { ExpensesList } from '../../components/expenses/expenses-list/expenses-list';
 import { ExpensesUpsert } from "../../components/expenses/expenses-upsert/expenses-upsert";
 import { CreateGroup } from "../../components/groups/create-group/create-group";
 import { JoinGroup } from "../../components/groups/join-group/join-group";
+import { GroupSettings } from "../../components/groups/group-settings/group-settings";
 
 @Component({
   selector: 'app-expenses-dashboard',
@@ -25,11 +26,12 @@ import { JoinGroup } from "../../components/groups/join-group/join-group";
     MatIconModule,
     MatTabGroup,
     MatTab,
-    ExpensesTopBar,
+    GroupSelector,
     ExpensesList,
     ExpensesUpsert,
     CreateGroup,
-    JoinGroup
+    JoinGroup,
+    GroupSettings
 ],
   templateUrl: './expenses-dashboard.html',
   styleUrl: './expenses-dashboard.css',
