@@ -16,6 +16,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     });
   };
 
+  const showBadRequestError = (errorMessage: string) => {
+    snackBar.open(errorMessage, 'Close', {
+      duration: 5000
+    });
+  };
+
   const showNotFoundError = () => {
     snackBar.open('Resource not found. Please try again.', 'Close', {
       duration: 5000
@@ -24,7 +30,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401) {
+      if (error.status === 400) {
+        showBadRequestError(error.error ?? 'Error has occurred. Please try again.');
+      }
+      else if (error.status === 401) {
         authService.logout();
         router.navigate(['/auth']);
       }

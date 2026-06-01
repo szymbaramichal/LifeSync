@@ -41,7 +41,7 @@ export class GroupSelector implements OnInit {
   }
 
   ngOnInit(): void {
-    this.expenseGroupStore.ensureLoaded();
+    this.expenseGroupStore.refresh();
   }
 
   onSelectedExpenseGroupIdChange(groupId: string): void {

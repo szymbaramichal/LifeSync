@@ -40,4 +40,8 @@ export class ExpenseGroupsService {
   removeMemberFromExpenseGroup(groupId: string, memberUserId: string): Observable<void> {
     return this.httpClient.delete<void>(this.baseUrl + '/api/expense-groups/' + groupId + '/members/' + memberUserId);
   }
+
+  changeExpenseGroupInvitationState(groupId: string, action: 'accept' | 'decline'): Observable<void> {
+    return this.httpClient.put<void>(this.baseUrl + '/api/expense-groups/' + groupId + '/' + action, {});
+  }
 }

@@ -27,13 +27,17 @@
                   · Invitation pending
                 }
               </span>
-              <button
-                matButton="filled"
-                type="button"
-                [disabled]="group.groupRole !== GroupRole.Owner || member.groupRole === GroupRole.Owner"
-                (click)="onDeleteUser(member)">
-                Delete
-              </button>
+              <div matListItemMeta>
+                <button
+                  mat-icon-button
+                  type="button"
+                  color="warn"
+                  [disabled]="group.groupRole !== GroupRole.Owner || member.groupRole === GroupRole.Owner"
+                  (click)="onDeleteUser(member)"
+                  aria-label="Remove member">
+                  <mat-icon>person_remove</mat-icon>
+                </button>
+              </div>
             </mat-list-item>
           }
         </mat-list>

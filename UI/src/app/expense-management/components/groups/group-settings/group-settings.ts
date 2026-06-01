@@ -1,7 +1,8 @@
-import { Component, DestroyRef, effect, inject, input, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject, input, signal, untracked, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -13,7 +14,7 @@ import { ExpenseGroupStore } from '../../../expense-group.store';
 
 @Component({
   selector: 'app-group-settings',
-  imports: [ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatListModule],
+  imports: [ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatListModule],
   templateUrl: './group-settings.html',
   styleUrl: './group-settings.css',
 })
@@ -22,6 +23,7 @@ export class GroupSettings {
   private destroyRef = inject(DestroyRef);
   private snackBar = inject(MatSnackBar);
   private formBuilder = inject(FormBuilder);
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
   private expenseGroupsService = inject(ExpenseGroupsService);
   private expenseGroupStore = inject(ExpenseGroupStore);
 
@@ -63,6 +65,7 @@ export class GroupSettings {
           this.inviteForm.reset();
           this.loadGroupDetails(groupId);
           this.snackBar.open('User invited!', 'Close', { duration: 5000 });
+          this.formDirective.resetForm();
         }
       });
   }

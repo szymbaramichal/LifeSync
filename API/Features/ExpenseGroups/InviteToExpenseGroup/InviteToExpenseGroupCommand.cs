@@ -22,11 +22,16 @@ public class InviteToExpenseGroupCommandHandler(ApplicationDbContext dbContext) 
         }
 
         var invitedUserId = await dbContext.Users
-            .Where(x => x.Username.Equals(request.UserName, StringComparison.InvariantCultureIgnoreCase))
+            .Where(x => x.Username.ToLower() == request.UserName.ToLower())
             .Select(x => x.Id)
             .FirstOrDefaultAsync(ct);
 
         if (invitedUserId == Guid.Empty)
+        {
+            return false;
+        }
+
+        if (dbContext.UserExpenseGroups.Any(x => x.UserId == invitedUserId && x.ExpenseGroupId == request.ExpenseGroupId))
         {
             return false;
         }
@@ -36,7 +41,8 @@ public class InviteToExpenseGroupCommandHandler(ApplicationDbContext dbContext) 
             Id = Guid.CreateVersion7(),
             ExpenseGroupId = request.ExpenseGroupId,
             UserId = invitedUserId,
-            IsPendingInvitation = true
+            IsPendingInvitation = true,
+            GroupRole = EntityRole.Member
         };
 
         dbContext.UserExpenseGroups.Add(newUserGroupEntity);

@@ -1,3 +1,4 @@
+using API.Features.ExpenseGroups.ChangeExpenseGroupInvitationState;
 using API.Features.ExpenseGroups.CreateExpenseGroup;
 using API.Features.ExpenseGroups.DeleteExpenseGroup;
 using API.Features.ExpenseGroups.Expenses;
@@ -24,6 +25,7 @@ public static class ExpenseGroupEndpoints
         groups.MapDeleteExpenseGroupEndpoint();
         groups.MapInviteToExpenseGroupEndpoint();
         groups.MapRemoveUserFromExpenseGroupEndpoint();
+        groups.MapChangeExpenseGroupInvitationStateEndpoint();
 
         var groupById = groups.MapGroup("/{groupId:guid}");
         groupById.MapExpenseGroupExpenseEndpoints();

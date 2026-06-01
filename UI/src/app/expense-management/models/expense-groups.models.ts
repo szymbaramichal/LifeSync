@@ -3,6 +3,7 @@ export interface ExpenseGroupDto {
   name: string;
   isPrivate: boolean;
   groupRole: GroupRole;
+  isPendingInvitation: boolean;
 }
 
 export enum GroupRole {

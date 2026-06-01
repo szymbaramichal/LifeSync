@@ -11,13 +11,16 @@ export class ExpenseGroupStore {
   private loaded = false;
 
   readonly groups = signal<ExpenseGroupDto[]>([]);
+  readonly pendingGroups = signal<ExpenseGroupDto[]>([]);
 
   ensureLoaded(): void {
     if (this.loaded || this.loading) return;
 
     this.loading = true;
     this.expenseGroupsService.getExpenseGroups().subscribe(groups => {
-      this.groups.set(groups);
+      this.groups.set(groups.filter(x => !x.isPendingInvitation));
+      this.pendingGroups.set(groups.filter(x => x.isPendingInvitation));
+
       this.loading = false;
       this.loaded = true;
     });
@@ -26,5 +29,17 @@ export class ExpenseGroupStore {
   refresh(): void {
     this.loaded = false;
     this.ensureLoaded();
+  }
+
+  acceptInvitation(groupId: string): void {
+    this.expenseGroupsService.changeExpenseGroupInvitationState(groupId, 'accept').subscribe(() => {
+      this.refresh();
+    });
+  }
+
+  declineInvitation(groupId: string): void {
+    this.expenseGroupsService.changeExpenseGroupInvitationState(groupId, 'decline').subscribe(() => {
+      this.refresh();
+    });
   }
 }

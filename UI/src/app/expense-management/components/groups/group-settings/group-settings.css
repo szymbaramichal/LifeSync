@@ -16,3 +16,7 @@
 .inline-form mat-form-field {
   flex: 1;
 }
+
+mat-card-header {
+  margin-bottom: 0.5rem;
+}
