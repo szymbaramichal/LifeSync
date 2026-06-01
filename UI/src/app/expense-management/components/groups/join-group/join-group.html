@@ -1,0 +1,16 @@
+<div class="join-container">
+  <h1>Join new expense group</h1>
+  <h3>Look below if you have any pending invitations, if so - decide whether you join or decline it!</h3>
+  <mat-list>
+    @for (pending of expenseGroupsStore.pendingGroups(); track pending.id)
+    {
+      <mat-list-item>
+        <span matListItemTitle>{{pending.name}}</span>
+        <div matListItemMeta>
+          <button mat-icon-button (click)="onJoin(pending.id)"><mat-icon>person_add</mat-icon></button>
+          <button mat-icon-button (click)="onDecline(pending.id)"><mat-icon>person_remove</mat-icon></button>
+        </div>
+      </mat-list-item>
+    }
+  </mat-list>
+</div>

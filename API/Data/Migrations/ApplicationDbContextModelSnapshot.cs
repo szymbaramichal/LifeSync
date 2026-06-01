@@ -96,11 +96,6 @@ namespace API.Data.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("FirebaseUID")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -110,6 +105,11 @@ namespace API.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("UpdatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -136,6 +136,9 @@ namespace API.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("GroupRole")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsPendingInvitation")
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("ModifiedBy")

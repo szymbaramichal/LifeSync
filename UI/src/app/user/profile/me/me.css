@@ -1,0 +1,12 @@
+.me-container {
+  margin: 1rem auto 0 auto;
+  max-width: 1200px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  padding-right: 0.5rem;
+  padding-bottom: 0.5rem;
+}

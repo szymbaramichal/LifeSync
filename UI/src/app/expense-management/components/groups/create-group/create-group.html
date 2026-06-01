@@ -1,0 +1,14 @@
+<div class="create-container">
+  <h1>Create your expense group</h1>
+  <h3>Invite your friends to it to split your expenses, track your billings and be more synced.</h3>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column;">
+    <mat-form-field>
+      <mat-label>Expense group name</mat-label>
+      <input matInput name="name" formControlName="name">
+    </mat-form-field>
+
+    <div class="form-actions">
+      <button matButton="filled">Submit</button>
+    </div>
+  </form>
+</div>

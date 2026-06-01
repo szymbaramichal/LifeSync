@@ -1,0 +1,8 @@
+.expenses-group-select-panel .group-actions-optgroup .mat-mdc-optgroup-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.expenses-group-select-panel .group-actions-optgroup .mdc-list-item__primary-text {
+  font-size: 0.875rem;
+}

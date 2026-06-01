@@ -1,0 +1,22 @@
+.group-settings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1rem;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.inline-form {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.inline-form mat-form-field {
+  flex: 1;
+}
+
+mat-card-header {
+  margin-bottom: 0.5rem;
+}

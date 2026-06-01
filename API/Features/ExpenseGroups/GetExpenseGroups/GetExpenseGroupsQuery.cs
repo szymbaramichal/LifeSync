@@ -7,7 +7,7 @@ namespace API.Features.ExpenseGroups.GetExpenseGroups;
 
 public sealed record GetExpenseGroupsQuery(Guid UserId) : IRequest<List<GetExpenseGroupsResult>>;
 
-public sealed record GetExpenseGroupsResult(Guid Id, string Name, bool IsPrivate, EntityRole GroupRole);
+public sealed record GetExpenseGroupsResult(Guid Id, string Name, bool IsPrivate, EntityRole GroupRole, bool IsPendingInvitation);
 
 public sealed class GetExpenseGroupsHandler(ApplicationDbContext dbContext)
     : IRequestHandler<GetExpenseGroupsQuery, List<GetExpenseGroupsResult>>
@@ -22,8 +22,8 @@ public sealed class GetExpenseGroupsHandler(ApplicationDbContext dbContext)
                 x.ExpenseGroupId,
                 x.ExpenseGroup.Name,
                 x.ExpenseGroup.IsPrivate,
-                x.GroupRole))
+                x.GroupRole,
+                x.IsPendingInvitation))
             .ToListAsync(cancellationToken);
     }
 }
-

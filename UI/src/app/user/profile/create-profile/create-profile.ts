@@ -30,7 +30,7 @@ export class CreateProfile {
   isLoading = signal(false);
 
   profileForm: FormGroup = this.fb.nonNullable.group({
-    displayName: ['', [Validators.required, Validators.minLength(3)]]
+    username: ['', [Validators.required, Validators.minLength(3)]]
   });
 
   onSubmit(): void {
@@ -38,7 +38,7 @@ export class CreateProfile {
       this.isLoading.set(true);
 
       const request: CreateProfileRequest = {
-        displayName: this.profileForm.value.displayName
+        username: this.profileForm.value.username
       };
 
       this.profileService.createProfile(request).subscribe({

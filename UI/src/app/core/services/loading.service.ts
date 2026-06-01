@@ -5,7 +5,7 @@ import { Injectable, signal } from '@angular/core';
 })
 export class LoadingService {
   private activeRequests = 0;
-  private showDelayMs = 150;
+  private showDelayMs = 100;
   private minVisibleMs = 500;
   private shownAtMs: number | null = null;
   private showTimeoutId: ReturnType<typeof setTimeout> | null = null;
