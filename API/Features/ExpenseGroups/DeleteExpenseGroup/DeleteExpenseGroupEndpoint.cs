@@ -1,5 +1,5 @@
 using API.Extensions;
-using API.Messaging;
+using API.Messaging.Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Features.ExpenseGroups.DeleteExpenseGroup;
@@ -26,10 +26,9 @@ public static class DeleteExpenseGroupEndpoint
         CancellationToken cancellationToken)
     {
         var userId = httpContext.User.GetUserId();
-        
+
         var deleted = await sender.Send(new DeleteExpenseGroupCommand(userId, groupId), cancellationToken);
 
         return deleted ? TypedResults.NoContent() : TypedResults.NotFound();
     }
 }
-

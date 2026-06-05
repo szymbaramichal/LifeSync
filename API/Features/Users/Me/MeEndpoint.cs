@@ -1,5 +1,5 @@
 using API.Extensions;
-using API.Messaging;
+using API.Messaging.Mediator;
 
 namespace API.Features.Users.Me;
 
@@ -40,4 +40,3 @@ public static class MeEndpoint
         return TypedResults.Ok(result);
     }
 }
-

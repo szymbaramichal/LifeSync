@@ -1,6 +1,8 @@
 using API.Data;
 using API.Data.Models;
-using API.Messaging;
+using API.Messaging.Mediator;
+using API.Messaging.SSE;
+using API.Messaging.SSE.Models;
 using API.Shared;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,11 +10,12 @@ namespace API.Features.ExpenseGroups.InviteToExpenseGroup;
 
 public record InviteToExpenseGroupCommand(Guid InviterId, Guid ExpenseGroupId, string UserName) : IRequest<bool>;
 
-public class InviteToExpenseGroupCommandHandler(ApplicationDbContext dbContext) : IRequestHandler<InviteToExpenseGroupCommand, bool>
+public class InviteToExpenseGroupCommandHandler(ApplicationDbContext dbContext,
+    NotificationsService notificationsService) : IRequestHandler<InviteToExpenseGroupCommand, bool>
 {
     public async Task<bool> Handle(InviteToExpenseGroupCommand request, CancellationToken ct)
     {
-        var userExpenseGroup = await dbContext.UserExpenseGroups.FirstOrDefaultAsync(
+        var userExpenseGroup = await dbContext.UserExpenseGroups.Include(x => x.ExpenseGroup).FirstOrDefaultAsync(
             x => x.UserId == request.InviterId && x.ExpenseGroupId == request.ExpenseGroupId,
             ct);
 
@@ -47,6 +50,11 @@ public class InviteToExpenseGroupCommandHandler(ApplicationDbContext dbContext) 
 
         dbContext.UserExpenseGroups.Add(newUserGroupEntity);
         await dbContext.SaveChangesAsync(ct);
+
+        await notificationsService.NotifyAsync(invitedUserId,
+            new GroupInvitationNotification(request.ExpenseGroupId,
+                userExpenseGroup.ExpenseGroup.Name)
+        );
 
         return true;
     }

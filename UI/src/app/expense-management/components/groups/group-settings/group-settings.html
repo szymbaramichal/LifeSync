@@ -16,8 +16,8 @@
         <mat-list>
           @for (member of group.members; track member.userId) {
             <mat-list-item>
-              <span matListItemTitle>{{ member.username }}</span>
-              <span matListItemLine>
+              <span class="username" matListItemTitle>{{ member.username }}</span>
+              <p class="group-role" matListItemLine>
                 @if (member.groupRole === GroupRole.Owner) {
                   Owner
                 } @else {
@@ -26,7 +26,7 @@
                 @if (member.isPendingInvitation) {
                   · Invitation pending
                 }
-              </span>
+              </p>
               <div matListItemMeta>
                 <button
                   mat-icon-button

@@ -1,5 +1,5 @@
 using API.Extensions;
-using API.Messaging;
+using API.Messaging.Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Features.ExpenseGroups.UpdateExpenseGroup;
@@ -37,4 +37,3 @@ public static class UpdateExpenseGroupEndpoint
         return result is null ? TypedResults.NotFound() : TypedResults.Ok(result);
     }
 }
-

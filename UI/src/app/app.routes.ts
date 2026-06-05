@@ -5,7 +5,6 @@ import { AuthPage } from './auth/pages/auth-page/auth-page';
 import { authGuard } from './core/guards/auth.guard';
 import { NotFound } from './not-found/not-found';
 import { guestGuard } from './core/guards/guest.guard';
-import { Dashboard } from './dashboard/dashboard';
 import { meResolver } from './core/resolvers/me.resolver';
 import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
 import { GuestLayout } from './layouts/guest-layout/guest-layout';

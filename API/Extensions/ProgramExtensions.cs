@@ -2,12 +2,13 @@ using System.Reflection;
 using System.Security.Claims;
 using API.Data;
 using API.Shared;
-using API.Messaging;
+using API.Messaging.Mediator;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using API.Messaging.SSE;
 
 namespace API.Extensions;
 
@@ -23,6 +24,11 @@ public static class ProgramExtensions
             .AddClasses(c => c.AssignableTo(typeof(IRequestHandler<,>)))
             .AsImplementedInterfaces()
             .WithScopedLifetime());
+    }
+
+    public static void AddSSE(this IServiceCollection services)
+    {
+        services.AddSingleton<NotificationsService>();
     }
 
     public static void AddFluentValidators(this IServiceCollection services,
@@ -52,9 +58,18 @@ public static class ProgramExtensions
                     ValidAudience = audience,
                     ValidateLifetime = true
                 };
-                
+
                 options.Events = new JwtBearerEvents
-                {
+                {   OnMessageReceived = async (context) =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.Request.Path;
+                        if (!string.IsNullOrWhiteSpace(accessToken) && path.StartsWithSegments("/notifications"))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return;
+                    },
                     OnTokenValidated = async context =>
                     {
                         var principal = context.Principal;
@@ -89,19 +104,16 @@ public static class ProgramExtensions
                         }
                     }
                 };
-                
+
             });
 
-        services.AddAuthorization(options =>
-        {
-            options.DefaultPolicy = new AuthorizationPolicyBuilder()
+        services.AddAuthorizationBuilder()
+            .SetDefaultPolicy(new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .RequireClaim(AuthConstants.UserIdClaimType)
-                .Build();
-
-            options.AddPolicy(AuthConstants.AuthenticatedOnlyPolicy, policy =>
+                .Build())
+            .AddPolicy(AuthConstants.AuthenticatedOnlyPolicy, policy =>
                 policy.RequireAuthenticatedUser());
-        });
     }
 
     public static void AddCors(this IServiceCollection services,

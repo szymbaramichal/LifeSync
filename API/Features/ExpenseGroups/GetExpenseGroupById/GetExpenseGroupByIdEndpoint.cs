@@ -1,5 +1,5 @@
 using API.Extensions;
-using API.Messaging;
+using API.Messaging.Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Features.ExpenseGroups.GetExpenseGroupById;
@@ -32,4 +32,3 @@ public static class GetExpenseGroupByIdEndpoint
         return result is null ? TypedResults.NotFound() : TypedResults.Ok(result);
     }
 }
-

@@ -1,6 +1,6 @@
 using API.Data;
 using API.Extensions;
-using API.Messaging;
+using API.Messaging.Mediator;
 using API.Shared;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;

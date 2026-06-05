@@ -1,5 +1,5 @@
 using API.Extensions;
-using API.Messaging;
+using API.Messaging.Mediator;
 
 namespace API.Features.ExpenseGroups.CreateExpenseGroup;
 
