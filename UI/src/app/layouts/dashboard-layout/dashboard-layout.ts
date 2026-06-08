@@ -41,7 +41,6 @@ export class DashboardLayout {
     effect(() => {
       const notification = this.notificationService.latest();
       if (notification) {
-        console.log('notification!!!');
         this.snackBar.open('You have been invited to new expense group!', 'Close', {
           duration: 5000,
         });

@@ -31,7 +31,6 @@ export class NotificationsService {
     this.eventSource = new EventSource(url);
 
     this.eventSource.addEventListener('notifications', (event: MessageEvent) => {
-      console.log('NEW ONE!')
       const notification = JSON.parse(event.data) as GroupInvitationNotification;
       this._notifications.update(list => [...list, notification]);
       this._latest.set(notification);
