@@ -1,5 +1,5 @@
 using API.Extensions;
-using API.Messaging;
+using API.Messaging.Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Features.ExpenseGroups.ChangeExpenseGroupInvitationState;

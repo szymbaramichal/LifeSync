@@ -1,4 +1,4 @@
-namespace API.Messaging;
+namespace API.Messaging.Mediator;
 
 public interface IRequestHandler<in TRequest, TResponse>
     where TRequest : IRequest<TResponse>

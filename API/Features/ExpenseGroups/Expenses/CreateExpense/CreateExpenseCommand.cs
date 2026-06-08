@@ -1,6 +1,6 @@
 using API.Data;
 using API.Data.Models;
-using API.Messaging;
+using API.Messaging.Mediator;
 
 namespace API.Features.ExpenseGroups.Expenses.CreateExpense;
 

@@ -1,5 +1,5 @@
 using API.Data;
-using API.Messaging;
+using API.Messaging.Mediator;
 using API.Shared;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,4 +37,3 @@ public sealed class UpdateExpenseGroupHandler(ApplicationDbContext dbContext)
             membership.ExpenseGroup.IsPrivate);
     }
 }
-

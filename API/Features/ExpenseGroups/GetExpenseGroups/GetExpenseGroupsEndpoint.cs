@@ -1,5 +1,5 @@
 using API.Extensions;
-using API.Messaging;
+using API.Messaging.Mediator;
 
 namespace API.Features.ExpenseGroups.GetExpenseGroups;
 
@@ -29,4 +29,3 @@ public static class GetExpenseGroupsEndpoint
         return TypedResults.Ok(response);
     }
 }
-

@@ -20,3 +20,11 @@
 mat-card-header {
   margin-bottom: 0.5rem;
 }
+
+.username {
+  font-weight: 900;
+}
+
+.group-role {
+  margin-left: 0px;
+}

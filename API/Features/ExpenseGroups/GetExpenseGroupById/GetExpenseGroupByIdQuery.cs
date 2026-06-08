@@ -1,5 +1,5 @@
 using API.Data;
-using API.Messaging;
+using API.Messaging.Mediator;
 using API.Shared;
 using Microsoft.EntityFrameworkCore;
 
