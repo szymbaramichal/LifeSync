@@ -6,6 +6,7 @@ import { MatInput } from '@angular/material/input';
 import { CreateExpenseRequest } from '../../../models/expenses.models';
 import { ExpensesService } from '../../../services/expenses.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ExpenseGroupStore } from '../../../expense-group.store';
 
 @Component({
   selector: 'app-expenses-upsert',
@@ -15,8 +16,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ExpensesUpsert {
   private expensesService = inject(ExpensesService);
+  expenseGroupStore = inject(ExpenseGroupStore);
   private snackBar = inject(MatSnackBar);
-  expenseGroupId = input<string>('');
   isEditMode = signal<boolean>(false);
   @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
 
@@ -38,7 +39,7 @@ export class ExpensesUpsert {
       description: expense.description!,
     };
 
-    this.expensesService.createExpense(this.expenseGroupId(), request).subscribe({
+    this.expensesService.createExpense(this.expenseGroupStore.selectedGroupId(), request).subscribe({
       next: () => {
         this.formDirective.resetForm();
         this.snackBar.open('Expense added!', 'Close', {

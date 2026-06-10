@@ -1,7 +1,7 @@
-import { Component, DestroyRef, inject, Input, OnChanges, SimpleChanges, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, DestroyRef, inject, Input, OnChanges, SimpleChanges, signal, effect } from '@angular/core';
 import { ExpenseDto } from '../../../models/expenses.models';
 import { ExpensesService } from '../../../services/expenses.service';
+import { ExpenseGroupStore } from '../../../expense-group.store';
 
 @Component({
   selector: 'app-expenses-list',
@@ -9,30 +9,21 @@ import { ExpensesService } from '../../../services/expenses.service';
   templateUrl: './expenses-list.html',
   styleUrl: './expenses-list.css',
 })
-export class ExpensesList implements OnChanges {
-  @Input() groupId: string | null = null;
-  @Input() refreshVersion = 0;
-
-  private destroyRef = inject(DestroyRef);
+export class ExpensesList {
   private expensesService = inject(ExpensesService);
+  expenseGroupStore = inject(ExpenseGroupStore);
 
   expenses = signal<ExpenseDto[]>([]);
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (!changes['groupId'] && !changes['refreshVersion']) {
-      return;
-    }
+  constructor() {
+    effect(() => {
+      const groupId = this.expenseGroupStore.selectedGroupId();
+      if (groupId === '')
+        return;
 
-    if (!this.groupId) {
-      this.expenses.set([]);
-      return;
-    }
-
-    this.expensesService
-      .getExpenses(this.groupId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (expenses) => this.expenses.set(expenses),
+      this.expensesService.getExpenses(groupId).subscribe((expenses) => {
+        this.expenses.set(expenses);
       });
+    })
   }
 }

@@ -25,17 +25,11 @@ export class GroupSelector implements OnInit {
 
   constructor() {
     effect(() => {
-      const groups = this.expenseGroupStore.groups();
-      if (groups.length === 0) {
-        return;
-      }
-
-      const hasSelectedGroup = groups.some((group) => group.id === this.selectedExpenseGroupId);
-      const groupIdToEmit = hasSelectedGroup ? this.selectedExpenseGroupId : groups[0].id;
-
-      if (groupIdToEmit !== this.selectedExpenseGroupId) {
-        this.selectedExpenseGroupId = groupIdToEmit;
-        this.expenseGroupChanged.emit(groupIdToEmit);
+      const selected = this.expenseGroupStore.selectedGroup();
+      const newId = selected ? selected.id : '';
+      if (newId !== this.selectedExpenseGroupId) {
+        this.selectedExpenseGroupId = newId;
+        this.expenseGroupChanged.emit(newId);
       }
     });
   }
@@ -45,6 +39,11 @@ export class GroupSelector implements OnInit {
   }
 
   onSelectedExpenseGroupIdChange(groupId: string): void {
-    this.expenseGroupChanged.emit(groupId ?? '');
+    if (groupId === 'create' || groupId === 'join') {
+      this.expenseGroupChanged.emit(groupId);
+    } else {
+      this.expenseGroupStore.selectGroupById(groupId ?? '');
+      this.expenseGroupChanged.emit(groupId ?? '');
+    }
   }
 }

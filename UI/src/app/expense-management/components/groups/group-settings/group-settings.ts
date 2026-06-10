@@ -19,16 +19,14 @@ import { ExpenseGroupStore } from '../../../expense-group.store';
   styleUrl: './group-settings.css',
 })
 export class GroupSettings {
-  groupId = input<string>('');
   private destroyRef = inject(DestroyRef);
   private snackBar = inject(MatSnackBar);
   private formBuilder = inject(FormBuilder);
   @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
   private expenseGroupsService = inject(ExpenseGroupsService);
-  private expenseGroupStore = inject(ExpenseGroupStore);
+  expenseGroupStore = inject(ExpenseGroupStore);
 
   readonly GroupRole = GroupRole;
-  groupDetails = signal<ExpenseGroupDetailsDto | null>(null);
 
   inviteForm: FormGroup = this.formBuilder.group({
     username: ['', [Validators.required]]
@@ -40,19 +38,15 @@ export class GroupSettings {
 
   constructor() {
     effect(() => {
-      const selectedGroupId = this.groupId();
-
-      if (!selectedGroupId) {
-        this.groupDetails.set(null);
-        return;
+      const group = this.expenseGroupStore.selectedGroup();
+      if (group) {
+        this.groupForm.patchValue({ name: group.name }, { emitEvent: false });
       }
-
-      this.loadGroupDetails(selectedGroupId);
     });
   }
 
   onInviteUser(): void {
-    const groupId = this.groupId();
+    const groupId = this.expenseGroupStore.selectedGroupId();
     if (!groupId || this.inviteForm.invalid) {
       return;
     }
@@ -63,7 +57,7 @@ export class GroupSettings {
       .subscribe({
         next: () => {
           this.inviteForm.reset();
-          this.loadGroupDetails(groupId);
+          this.expenseGroupStore.refreshSelectedGroupDetails();
           this.snackBar.open('User invited!', 'Close', { duration: 5000 });
           this.formDirective.resetForm();
         }
@@ -71,7 +65,7 @@ export class GroupSettings {
   }
 
   onDeleteUser(member: ExpenseGroupMemberDto): void {
-    const groupId = this.groupId();
+    const groupId = this.expenseGroupStore.selectedGroupId();
     if (!groupId || member.groupRole === GroupRole.Owner) {
       return;
     }
@@ -81,15 +75,15 @@ export class GroupSettings {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.loadGroupDetails(groupId);
+          this.expenseGroupStore.refreshSelectedGroupDetails();
           this.snackBar.open('User removed!', 'Close', { duration: 5000 });
         }
       });
   }
 
   onUpdateGroupName(): void {
-    const group = this.groupDetails();
-    const groupId = this.groupId();
+    const group = this.expenseGroupStore.selectedGroup();
+    const groupId = this.expenseGroupStore.selectedGroupId();
     if (!group || !groupId || this.groupForm.invalid) {
       return;
     }
@@ -103,20 +97,8 @@ export class GroupSettings {
       .subscribe({
         next: () => {
           this.expenseGroupStore.refresh();
-          this.loadGroupDetails(groupId);
+          this.expenseGroupStore.refreshSelectedGroupDetails();
           this.snackBar.open('Group updated!', 'Close', { duration: 5000 });
-        }
-      });
-  }
-
-  private loadGroupDetails(groupId: string): void {
-    this.expenseGroupsService
-      .getExpenseGroupById(groupId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (groupDetails) => {
-          this.groupDetails.set(groupDetails);
-          this.groupForm.patchValue({ name: groupDetails.name }, { emitEvent: false });
         }
       });
   }

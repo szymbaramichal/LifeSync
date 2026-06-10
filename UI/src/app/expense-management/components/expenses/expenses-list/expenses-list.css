@@ -1,0 +1,8 @@
+.expenses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1rem;
+  max-width: 1100px;
+  margin: auto;
+}
