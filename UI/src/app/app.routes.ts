@@ -24,8 +24,9 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardLayout,
     canActivate: [authGuard],
+    resolve: { me: meResolver },
     children: [
-      { path: '', component: Me, resolve: { me: meResolver } },
+      { path: '', component: Me},
       { path: 'expenses', component: ExpensesDashboard }
     ]
   },

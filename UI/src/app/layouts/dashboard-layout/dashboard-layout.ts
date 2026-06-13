@@ -1,5 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,7 @@ import { RouterOutlet } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NotificationsService } from '../../core/services/notifications.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ProfileService } from '../../user/profile/profile.service';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -23,8 +24,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class DashboardLayout {
   private readonly breakpointObserver = inject(BreakpointObserver);
+  private readonly profileService = inject(ProfileService);
   private notificationService = inject(NotificationsService);
   private snackBar = inject(MatSnackBar);
+  private destroyRef = inject(DestroyRef);
 
   readonly isMobile = signal(false);
   readonly isSidebarOpened = signal(true);
@@ -32,7 +35,7 @@ export class DashboardLayout {
   constructor() {
     this.breakpointObserver
       .observe('(max-width: 768px)')
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((state) => {
         this.isMobile.set(state.matches);
         this.isSidebarOpened.set(!state.matches);

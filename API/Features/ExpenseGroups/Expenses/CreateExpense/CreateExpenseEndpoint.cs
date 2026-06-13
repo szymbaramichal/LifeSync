@@ -24,8 +24,16 @@ public static class CreateExpenseEndpoint
         [FromRoute] Guid groupId,
         CreateExpenseRequest request,
         IMediator sender,
+        IValidator<CreateExpenseRequest> validator,
         CancellationToken cancellationToken)
     {
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            return TypedResults.UnprocessableEntity(validationResult);
+        }
+
         var result = await sender.Send(
             new CreateExpenseCommand(groupId, request.Amount, request.Title, request.Description, request.UserShares),
             cancellationToken);
