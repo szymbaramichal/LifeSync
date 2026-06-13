@@ -4,10 +4,11 @@ export enum SwitchOptions {
   Amount = 'amount'
 };
 
-export interface UserShare {
+export interface TableUserShare {
   index: number;
   userName: string;
   userId: string;
   amount: number;
   percentageShare: number;
+  selected: boolean;
 }
