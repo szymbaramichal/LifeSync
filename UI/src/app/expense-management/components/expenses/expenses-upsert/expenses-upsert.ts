@@ -59,7 +59,7 @@ export class ExpensesUpsert {
         index: 0,
         userId: userProfile.id,
         userName: userProfile.username,
-        amount: 0,
+        amount: totalAmount,
         percentageShare: 100,
         selected: true
       }
@@ -84,13 +84,6 @@ export class ExpensesUpsert {
   });
   displayedColumns: string[] = ['position', 'userName', 'percentageShare', 'amount'];
 
-  constructor() {
-    this.form.get('amount')?.valueChanges
-      .subscribe(value => {
-        console.log(value);
-      });
-  }
-
   goToStep2() {
     const { title, amount } = this.form.controls;
     title.markAsTouched();
@@ -102,6 +95,10 @@ export class ExpensesUpsert {
 
   goBack() {
     this.currentStep.set(1);
+  }
+
+  updateShareField(element: TableUserShare, field: 'amount' | 'percentageShare', event: Event) {
+    element[field] = +(event.target as HTMLInputElement).value;
   }
 
   isAllSelected() {
@@ -123,16 +120,17 @@ export class ExpensesUpsert {
     }
 
     const expense = this.form.value;
-    const userShares = this.userShares().map(row => ({
-      userId: row.userId,
-      shareAmount: row.amount
-    }));
 
     const request: CreateExpenseRequest = {
       title: expense.title!,
       amount: expense.amount!,
       description: expense.description || '',
-      userShares: []
+      userShares: this.userShares()
+        .filter(row => row.selected)
+        .map(row => ({
+          userId: row.userId,
+          shareAmount: row.amount
+        }))
     };
 
     this.expensesService.createExpense(this.expenseGroupStore.selectedGroupId(), request).subscribe({

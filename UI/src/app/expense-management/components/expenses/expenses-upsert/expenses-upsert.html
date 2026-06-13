@@ -74,7 +74,7 @@
               <th mat-header-cell *matHeaderCellDef>Percentage Share</th>
               <td mat-cell *matCellDef="let element">
                 <mat-form-field appearance="outline" class="table-input">
-                  <input matInput type="number" min="0" max="100" [disabled]="form.get('switchOption')?.value !== SwitchOptions.Percentage || !element.selected" [value]="element.percentageShare">
+                  <input matInput type="number" min="0" max="100" [disabled]="form.get('switchOption')?.value !== SwitchOptions.Percentage || !element.selected" [value]="element.percentageShare" (input)="updateShareField(element, 'percentageShare', $event)">
                   <mat-icon matSuffix>percentage</mat-icon>
                 </mat-form-field>
               </td>
@@ -84,7 +84,7 @@
               <th mat-header-cell *matHeaderCellDef> Amount </th>
               <td mat-cell *matCellDef="let element">
                 <mat-form-field appearance="outline" class="table-input">
-                  <input matInput [disabled]="form.get('switchOption')?.value !== SwitchOptions.Amount || !element.selected" type="number" min="0" [value]="element.amount">
+                  <input matInput [disabled]="form.get('switchOption')?.value !== SwitchOptions.Amount || !element.selected" type="number" min="0" [value]="element.amount" (input)="updateShareField(element, 'amount', $event)">
                   <mat-icon matSuffix>money</mat-icon>
                 </mat-form-field>
               </td>
