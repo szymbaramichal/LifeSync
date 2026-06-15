@@ -1,12 +1,15 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { ExpenseGroupsService } from './services/expense-groups.service';
 import { ExpenseGroupDto, ExpenseGroupDetailsDto } from './models/expense-groups.models';
+import { ExpenseDto } from './models/expenses.models';
+import { ExpensesService } from './services/expenses.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExpenseGroupStore {
   private expenseGroupsService = inject(ExpenseGroupsService);
+  private expensesService = inject(ExpensesService);
   private loading = false;
   private loaded = false;
 
@@ -18,6 +21,9 @@ export class ExpenseGroupStore {
 
   readonly groups = signal<ExpenseGroupDto[]>([]);
   readonly pendingGroups = signal<ExpenseGroupDto[]>([]);
+
+  private _expenses = signal<ExpenseDto[]>([]);
+  readonly expenses = this._expenses.asReadonly();
 
   ensureLoaded(): void {
     if (this.loaded || this.loading) return;
@@ -72,6 +78,12 @@ export class ExpenseGroupStore {
   refresh(): void {
     this.loaded = false;
     this.ensureLoaded();
+  }
+
+  refreshExpenses(): void {
+    this.expensesService.getExpenses(this._selectedGroupId()).subscribe((expenses) => {
+      this._expenses.set(expenses);
+    });
   }
 
   acceptInvitation(groupId: string): void {

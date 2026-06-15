@@ -43,6 +43,7 @@ export class GroupSelector implements OnInit {
       this.expenseGroupChanged.emit(groupId);
     } else {
       this.expenseGroupStore.selectGroupById(groupId ?? '');
+      this.expenseGroupStore.refreshExpenses();
       this.expenseGroupChanged.emit(groupId ?? '');
     }
   }

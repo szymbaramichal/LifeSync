@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, effect, inject, signal, ViewChild } from '@angular/core';
+import { Component, DestroyRef, effect, inject, output, signal, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatFormField, MatLabel, MatSuffix } from "@angular/material/form-field";
@@ -44,15 +44,18 @@ export class ExpensesUpsert {
   });
   formAmount = toSignal(this.form.controls.amount.valueChanges, { initialValue: 0.0 });
 
-  userShares = computed<TableUserShare[]>(() => {
-    console.log('computed!')
+  userShares = signal<TableUserShare[]>([]);
+
+  private initSharesEffect = effect(() => {
     const userProfile = this.profileService.myProfile();
     const group = this.expenseGroupStore.selectedGroup();
-    const totalAmount = this.formAmount() ?? 0;
 
     if (!userProfile) {
-      return [];
+      this.userShares.set([]);
+      return;
     }
+
+    const totalAmount = this.formAmount() ?? 0;
 
     const shares: TableUserShare[] = [
       {
@@ -80,7 +83,7 @@ export class ExpensesUpsert {
       });
     }
 
-    return shares;
+    this.userShares.set(shares);
   });
   displayedColumns: string[] = ['position', 'userName', 'percentageShare', 'amount'];
 
@@ -98,7 +101,18 @@ export class ExpensesUpsert {
   }
 
   updateShareField(element: TableUserShare, field: 'amount' | 'percentageShare', event: Event) {
-    element[field] = +(event.target as HTMLInputElement).value;
+    const newValue = +(event.target as HTMLInputElement).value;
+    const totalAmount = this.formAmount() ?? 0;
+
+    if (field === 'percentageShare') {
+      element.percentageShare = newValue;
+      element.amount = totalAmount > 0 ? +(totalAmount * newValue / 100).toFixed(2) : 0;
+    } else {
+      element.amount = newValue;
+      element.percentageShare = totalAmount > 0 ? +(newValue / totalAmount * 100).toFixed(2) : 0;
+    }
+
+    this.userShares.update(shares => [...shares]);
   }
 
   isAllSelected() {
@@ -141,6 +155,8 @@ export class ExpensesUpsert {
           switchOption: this.SwitchOptions.Me
         });
         this.currentStep.set(1);
+
+        this.expenseGroupStore.refreshExpenses();
 
         this.snackBar.open('Expense added!', 'Close', {
           duration: 5000,
