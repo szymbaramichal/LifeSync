@@ -1,30 +1,132 @@
-import { Component, inject, input, signal, ViewChild } from '@angular/core';
+import { Component, DestroyRef, effect, inject, output, signal, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import { MatFormField, MatLabel } from "@angular/material/form-field";
+import { MatFormField, MatLabel, MatSuffix } from "@angular/material/form-field";
 import { MatInput } from '@angular/material/input';
 import { CreateExpenseRequest } from '../../../models/expenses.models';
 import { ExpensesService } from '../../../services/expenses.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ExpenseGroupStore } from '../../../expense-group.store';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTableModule } from '@angular/material/table';
+import { MatIcon } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SwitchOptions, TableUserShare } from './expenses-upsert.models';
+import { ProfileService } from '../../../../user/profile/profile.service';
+import { CommonModule } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-expenses-upsert',
-  imports: [ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatButton],
+  imports: [CommonModule, ReactiveFormsModule, MatFormField, MatLabel,
+    MatInput, MatButton, MatButtonToggleModule, MatIcon, MatSuffix,
+    MatTableModule, MatCheckboxModule],
   templateUrl: './expenses-upsert.html',
   styleUrl: './expenses-upsert.css',
 })
 export class ExpensesUpsert {
+  protected readonly SwitchOptions = SwitchOptions;
+
+  private profileService = inject(ProfileService);
   private expensesService = inject(ExpensesService);
+  expenseGroupStore = inject(ExpenseGroupStore);
   private snackBar = inject(MatSnackBar);
-  expenseGroupId = input<string>('');
   isEditMode = signal<boolean>(false);
+  currentStep = signal<1 | 2>(1);
+  destroyRef = inject(DestroyRef);
   @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
 
   form = new FormGroup({
     title: new FormControl('', [Validators.required]),
-    amount: new FormControl(0.0, [Validators.required]),
+    amount: new FormControl(0.0, {updateOn: 'blur', validators: [Validators.required]}),
     description: new FormControl(''),
+    switchOption: new FormControl(this.SwitchOptions.Me)
   });
+  formAmount = toSignal(this.form.controls.amount.valueChanges, { initialValue: 0.0 });
+
+  userShares = signal<TableUserShare[]>([]);
+
+  private initSharesEffect = effect(() => {
+    const userProfile = this.profileService.myProfile();
+    const group = this.expenseGroupStore.selectedGroup();
+
+    if (!userProfile) {
+      this.userShares.set([]);
+      return;
+    }
+
+    const totalAmount = this.formAmount() ?? 0;
+
+    const shares: TableUserShare[] = [
+      {
+        index: 0,
+        userId: userProfile.id,
+        userName: userProfile.username,
+        amount: totalAmount,
+        percentageShare: 100,
+        selected: true
+      }
+    ];
+
+    const groupMembers = group?.members.filter(member => member.userId !== userProfile.id);
+
+    if (groupMembers) {
+      groupMembers.forEach((member, i) => {
+        shares.push({
+          index: i + 1,
+          userId: member.userId,
+          userName: member.username,
+          amount: 0,
+          percentageShare: 0,
+          selected: false
+        });
+      });
+    }
+
+    this.userShares.set(shares);
+  });
+  displayedColumns: string[] = ['position', 'userName', 'percentageShare', 'amount'];
+
+  goToStep2() {
+    const { title, amount } = this.form.controls;
+    title.markAsTouched();
+    amount.markAsTouched();
+    if (title.valid && amount.valid) {
+      this.currentStep.set(2);
+    }
+  }
+
+  goBack() {
+    this.currentStep.set(1);
+  }
+
+  updateShareField(element: TableUserShare, field: 'amount' | 'percentageShare', event: Event) {
+    const newValue = +(event.target as HTMLInputElement).value;
+    const totalAmount = this.formAmount() ?? 0;
+
+    if (field === 'percentageShare') {
+      element.percentageShare = newValue;
+      element.amount = totalAmount > 0 ? +(totalAmount * newValue / 100).toFixed(2) : 0;
+    } else {
+      element.amount = newValue;
+      element.percentageShare = totalAmount > 0 ? +(newValue / totalAmount * 100).toFixed(2) : 0;
+    }
+
+    this.userShares.update(shares => [...shares]);
+  }
+
+  isAllSelected() {
+    return this.userShares().length > 0 && this.userShares().every(row => row.selected);
+  }
+
+  isSomeSelected() {
+    const selectedCount = this.userShares().filter(row => row.selected).length;
+    return selectedCount > 0 && selectedCount < this.userShares().length;
+  }
+
+  masterToggle(checked: boolean) {
+    this.userShares().forEach(row => row.selected = checked);
+  }
 
   onSubmit() {
     if (!this.form.valid) {
@@ -32,15 +134,30 @@ export class ExpensesUpsert {
     }
 
     const expense = this.form.value;
+
     const request: CreateExpenseRequest = {
       title: expense.title!,
       amount: expense.amount!,
-      description: expense.description!,
+      description: expense.description || '',
+      userShares: this.userShares()
+        .filter(row => row.selected)
+        .map(row => ({
+          userId: row.userId,
+          shareAmount: row.amount
+        }))
     };
 
-    this.expensesService.createExpense(this.expenseGroupId(), request).subscribe({
+    this.expensesService.createExpense(this.expenseGroupStore.selectedGroupId(), request).subscribe({
       next: () => {
         this.formDirective.resetForm();
+        this.form.patchValue({
+          amount: 0.0,
+          switchOption: this.SwitchOptions.Me
+        });
+        this.currentStep.set(1);
+
+        this.expenseGroupStore.refreshExpenses();
+
         this.snackBar.open('Expense added!', 'Close', {
           duration: 5000,
         });

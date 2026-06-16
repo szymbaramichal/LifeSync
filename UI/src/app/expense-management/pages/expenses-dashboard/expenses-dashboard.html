@@ -6,9 +6,9 @@
   <app-join-group></app-join-group>
 }
 @else {
-  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" (selectedTabChange)="onTabChange($event)">
-    <mat-tab label="Expenses"><app-expenses-list [groupId]="selectedGroupId()" [refreshVersion]="expensesRefreshVersion()"></app-expenses-list></mat-tab>
-    <mat-tab label="Add new expense"><app-expenses-upsert [expenseGroupId]="selectedGroupId()"></app-expenses-upsert></mat-tab>
-    <mat-tab label="Settings"><app-group-settings [groupId]="selectedGroupId()"></app-group-settings></mat-tab>
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight>
+    <mat-tab label="Expenses"><app-expenses-list></app-expenses-list></mat-tab>
+    <mat-tab label="Add new expense"><app-expenses-upsert></app-expenses-upsert></mat-tab>
+    <mat-tab label="Settings"><app-group-settings></app-group-settings></mat-tab>
   </mat-tab-group>
 }

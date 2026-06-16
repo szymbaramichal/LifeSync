@@ -1,11 +1,11 @@
 export interface MeResponse {
-  id: number;
+  id: string;
   firebaseUid: string;
   username: string;
 }
 
 export interface MeDto {
-  id: number;
+  id: string;
   username: string;
 }
 
@@ -14,7 +14,7 @@ export interface CreateProfileRequest {
 }
 
 export interface CreateProfileResponse {
-  id: number;
+  id: string;
   firebaseUid: string;
   username: string;
 }

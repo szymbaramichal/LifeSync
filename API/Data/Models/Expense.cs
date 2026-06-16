@@ -6,10 +6,15 @@ namespace API.Data.Models;
 public class Expense : BaseEntity
 {
     public double Amount { get; set; }
-    
+
     [MaxLength(50)]
     public string Title { get; set; } = string.Empty;
 
     [MaxLength(500)]
     public string Description { get; set; } = string.Empty;
+
+    public ICollection<ExpenseShare> ExpenseShares { get; set; } = [];
+
+    public Guid ExpenseGroupId { get; set; }
+    public ExpenseGroup ExpenseGroup { get; set; } = null!;
 }

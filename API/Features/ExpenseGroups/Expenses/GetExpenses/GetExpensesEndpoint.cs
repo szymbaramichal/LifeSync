@@ -21,7 +21,7 @@ public static class GetExpensesEndpoint
         IMediator sender,
         CancellationToken cancellationToken)
     {
-        var response = await sender.Send(new GetExpensesQuery(), cancellationToken);
+        var response = await sender.Send(new GetExpensesQuery(groupId), cancellationToken);
 
         return Results.Ok(response);
     }

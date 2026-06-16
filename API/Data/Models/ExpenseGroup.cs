@@ -8,4 +8,6 @@ public class ExpenseGroup : BaseEntity
     [MaxLength(50)]
     public string Name { get; set; } = string.Empty;
     public bool IsPrivate { get; set; } = false;
+
+    public ICollection<Expense> Expenses { get; set; } = [];
 }

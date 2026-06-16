@@ -5,10 +5,16 @@ export interface ExpenseDto {
   description: string;
 }
 
+export interface UserShareDto {
+  userId: string;
+  shareAmount: number;
+}
+
 export interface CreateExpenseRequest {
   amount: number;
   title: string;
   description: string;
+  userShares: UserShareDto[];
 }
 
 export interface UpdateExpenseRequest {
