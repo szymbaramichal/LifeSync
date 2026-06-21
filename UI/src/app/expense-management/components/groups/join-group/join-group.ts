@@ -16,7 +16,7 @@ export class JoinGroup {
   snackBar = inject(MatSnackBar);
 
   constructor() {
-    this.expenseGroupsStore.ensureLoaded();
+    this.expenseGroupsStore.ensureLoaded().subscribe();
   }
 
   onJoin(invitationId: string) {
