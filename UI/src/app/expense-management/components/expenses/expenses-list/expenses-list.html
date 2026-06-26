@@ -1,11 +1,76 @@
 <div class="expenses-list">
-  @if (!this.expenseGroupStore.selectedGroupId()) {
-    <p>Select an expense group to see expenses.</p>
-  } @else if (this.expenseGroupStore.expenses().length === 0) {
-    <p>No expenses in this group yet.</p>
-  } @else {
-    @for (expense of this.expenseGroupStore.expenses(); track expense.id) {
-      <p>{{ expense.title }} - {{ expense.amount }}</p>
-    }
+  <table mat-table
+         [dataSource]="dataSource()" multiTemplateDataRows
+         class="mat-elevation-z2 expenses-table">
+
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef>Title</th>
+      <td mat-cell *matCellDef="let element">{{ element.title }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>Amount</th>
+      <td mat-cell *matCellDef="let element" class="amount-cell">
+        {{ element.amount | currency }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="expand">
+      <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+      <td mat-cell *matCellDef="let element">
+        <button
+          mat-icon-button
+          aria-label="expand row"
+          (click)="toggle(element); $event.stopPropagation()"
+          class="expand-btn"
+          [class.expand-btn--open]="isExpanded(element)">
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+        <div class="expense-detail" [class.expense-detail--open]="isExpanded(element)">
+          <div class="expense-detail__inner">
+
+            @if (element.description) {
+              <p class="expense-detail__description">{{ element.description }}</p>
+            }
+
+            @if (element.userShares && element.userShares.length > 0) {
+              <div class="expense-detail__shares">
+                <span class="shares-label">Split between:</span>
+                <div class="shares-chips">
+                  @for (share of element.userShares; track share.userId) {
+                    <span class="share-chip">
+                      <span class="share-chip__name">{{ share.username }}</span>
+                      <span class="share-chip__amount">{{ share.shareAmount | currency }}</span>
+                    </span>
+                  }
+                </div>
+              </div>
+            }
+
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+        class="expense-row"
+        [class.expense-row--expanded]="isExpanded(element)"
+        (click)="toggle(element)">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="expense-detail-row"></tr>
+
+  </table>
+
+  @if (dataSource().length === 0) {
+    <div class="empty-state">
+      <mat-icon>receipt_long</mat-icon>
+      <p>No expenses yet. Add your first expense!</p>
+    </div>
   }
 </div>

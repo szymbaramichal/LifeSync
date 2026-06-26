@@ -6,6 +6,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { NotFound } from './not-found/not-found';
 import { guestGuard } from './core/guards/guest.guard';
 import { meResolver } from './core/resolvers/me.resolver';
+import { expenseGroupsResolver } from './core/resolvers/expense-group.resolver';
 import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
 import { GuestLayout } from './layouts/guest-layout/guest-layout';
 import { ExpensesDashboard } from './expense-management/pages/expenses-dashboard/expenses-dashboard';
@@ -27,7 +28,7 @@ export const routes: Routes = [
     resolve: { me: meResolver },
     children: [
       { path: '', component: Me},
-      { path: 'expenses', component: ExpensesDashboard }
+      { path: 'expenses', component: ExpensesDashboard, resolve: { expenseGroups: expenseGroupsResolver } }
     ]
   },
   { path: '**', component: NotFound  },

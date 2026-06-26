@@ -3,6 +3,13 @@ export interface ExpenseDto {
   amount: number;
   title: string;
   description: string;
+  userShares: UserShareResultDto[];
+}
+
+export interface UserShareResultDto {
+  userId: string;
+  username: string;
+  shareAmount: number;
 }
 
 export interface UserShareDto {

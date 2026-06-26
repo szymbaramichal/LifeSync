@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit, output } from '@angular/core';
+import { Component, effect, inject, output } from '@angular/core';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from "@angular/material/input";
 import { FormsModule } from '@angular/forms';
@@ -17,7 +17,7 @@ import { ExpenseGroupStore } from '../../../expense-group.store';
   templateUrl: './group-selector.html',
   styleUrl: './group-selector.css',
 })
-export class GroupSelector implements OnInit {
+export class GroupSelector {
   expenseGroupChanged = output<string>();
   expenseGroupStore = inject(ExpenseGroupStore);
 
@@ -34,16 +34,15 @@ export class GroupSelector implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.expenseGroupStore.refresh();
-  }
 
   onSelectedExpenseGroupIdChange(groupId: string): void {
     if (groupId === 'create' || groupId === 'join') {
       this.expenseGroupChanged.emit(groupId);
     } else {
-      this.expenseGroupStore.selectGroupById(groupId ?? '');
-      this.expenseGroupStore.refreshExpenses();
+      if (this.expenseGroupStore.selectedGroupId() !== groupId) {
+        this.expenseGroupStore.selectGroupById(groupId ?? '');
+        this.expenseGroupStore.refreshExpenses();
+      }
       this.expenseGroupChanged.emit(groupId ?? '');
     }
   }
