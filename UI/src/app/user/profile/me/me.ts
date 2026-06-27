@@ -4,10 +4,13 @@ import { MatCard } from "@angular/material/card";
 import { MatButton } from '@angular/material/button';
 import { AuthService } from '../../../auth/services/auth.service';
 import { Router } from '@angular/router';
+import { MarkdownPipe } from '../../../core/pipes/markdown.pipe';
+import { AsyncPipe } from '@angular/common';
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-profile',
-  imports: [MatCard, MatButton],
+  imports: [MatCard, MatButton, MarkdownPipe, AsyncPipe, MatIcon],
   templateUrl: './me.html',
   styleUrl: './me.css',
 })

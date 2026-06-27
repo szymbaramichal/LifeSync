@@ -1,6 +1,11 @@
 <div class="me-container">
   <mat-card>
-    <p>{{me().username}}</p>
+    <div class="me-picture">
+      <mat-icon class="me-icon">person</mat-icon>
+    </div>
+    <div class="me-username">{{me().username}}</div>
+
+    <div [innerHtml]="'# abc' | markdown | async"> </div>
 
     <div class="actions">
       <button matButton="filled" (click)="onLogout()">Logout</button>

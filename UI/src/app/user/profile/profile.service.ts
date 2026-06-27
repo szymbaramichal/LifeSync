@@ -35,6 +35,7 @@ export class ProfileService {
         this._myProfile.set({
           id: response.id,
           username: response.username,
+          description: '# Me'
         });
       })
     );
@@ -47,6 +48,7 @@ export class ProfileService {
           this._myProfile.set({
             id: response.id,
             username: response.username,
+            description: ''
           });
         })
       );
