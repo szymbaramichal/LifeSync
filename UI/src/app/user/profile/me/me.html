@@ -5,8 +5,18 @@
     </div>
     <div class="me-username">{{me().username}}</div>
 
-    <div [innerHtml]="'# abc' | markdown | async"> </div>
-
+    @if (editMode())
+    {
+      <markdown-editor
+        [initialValue]="'### Start typing here...'"
+        (valueChange)="onMarkdownChange($event)"></markdown-editor>
+      <div class="output-preview">
+        <h3>Raw Output:</h3>
+        <pre>{{ currentMarkdown() }}</pre>
+      </div>
+    } @else {
+      <div [innerHtml]="'# abc' | markdown | async"> </div>
+    }
     <div class="actions">
       <button matButton="filled" (click)="onLogout()">Logout</button>
     </div>
