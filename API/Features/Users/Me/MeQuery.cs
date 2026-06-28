@@ -6,7 +6,7 @@ namespace API.Features.Users.Me;
 
 public sealed record MeQuery(string FirebaseUid) : IRequest<MeResult?>;
 
-public sealed record MeResult(Guid Id, string FirebaseUid, string Username);
+public sealed record MeResult(Guid Id, string FirebaseUid, string Username, string Description);
 
 public sealed class MeHandler(ApplicationDbContext dbContext) : IRequestHandler<MeQuery, MeResult?>
 {
@@ -16,6 +16,6 @@ public sealed class MeHandler(ApplicationDbContext dbContext) : IRequestHandler<
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.FirebaseUID == request.FirebaseUid, cancellationToken);
 
-        return user is null ? null : new MeResult(user.Id, user.FirebaseUID, user.Username);
+        return user is null ? null : new MeResult(user.Id, user.FirebaseUID, user.Username, user.Description);
     }
 }

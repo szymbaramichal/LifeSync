@@ -1,5 +1,6 @@
 using API.Features.Users.CreateProfile;
 using API.Features.Users.Me;
+using API.Features.Users.UpdateProfile;
 
 namespace API.Features.Users;
 
@@ -12,6 +13,7 @@ public static class UserEndpoints
 
         group.MapCreateProfileEndpoint();
         group.MapMeEndpoint();
+        group.MapUpdateProfileEndpoint();
     }
 }
 

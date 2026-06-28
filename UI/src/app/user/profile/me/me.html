@@ -1,7 +1,34 @@
 <div class="me-container">
   <mat-card>
-    <p>{{me().username}}</p>
+    <div class="me-picture">
+      <mat-icon class="me-icon">person</mat-icon>
+    </div>
+    <div class="me-username">{{me().username}}</div>
 
+    <div class="me-toggle-container">
+      <mat-slide-toggle
+        [checked]="editMode()"
+        (change)="onToggleEditMode($event.checked)">
+        Edit Profile
+      </mat-slide-toggle>
+    </div>
+
+    <form [formGroup]="updateForm" (ngSubmit)="onUpdate()">
+      <div>
+        <h3>Description</h3>
+        @if (editMode())
+        {
+          <markdown-editor
+            formControlName="description"></markdown-editor>
+
+          <div class="edit-actions">
+            <button matButton="tonal" type="submit" [disabled]="isLoading() || updateForm.invalid">Save changes</button>
+          </div>
+        } @else {
+          <div class="me-description" [innerHtml]="currentMarkdown() | markdown | async"> </div>
+        }
+      </div>
+    </form>
     <div class="actions">
       <button matButton="filled" (click)="onLogout()">Logout</button>
     </div>

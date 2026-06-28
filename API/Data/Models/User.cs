@@ -9,5 +9,8 @@ public class User : BaseEntity
     public string FirebaseUID { get; set; } = string.Empty;
 
     [MaxLength(50)]
-    public string Username { get; set; } =  string.Empty;
+    public string Username { get; set; } = string.Empty;
+
+    [MaxLength(500)]
+    public string Description { get; set; } = string.Empty;
 }

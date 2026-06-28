@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { effect, inject, Injectable, signal } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CreateProfileRequest, CreateProfileResponse, MeDto, MeResponse } from './profile.models';
+import { CreateProfileRequest, CreateProfileResponse, MeDto, MeResponse, UpdateProfileRequest, UpdateProfileResponse } from './profile.models';
 import { AuthService } from '../../auth/services/auth.service';
 
 @Injectable({
@@ -35,6 +35,7 @@ export class ProfileService {
         this._myProfile.set({
           id: response.id,
           username: response.username,
+          description: response.description
         });
       })
     );
@@ -47,12 +48,31 @@ export class ProfileService {
           this._myProfile.set({
             id: response.id,
             username: response.username,
+            description: ''
           });
+        })
+      );
+  }
+
+  updateProfile(request: UpdateProfileRequest): Observable<UpdateProfileResponse> {
+    return this.httpClient.put<UpdateProfileResponse>(this.baseUrl + '/api/users/profile', request)
+      .pipe(
+        tap((response) => {
+          this._myProfile.update(prevValue => ({
+            id: response.id,
+            username: prevValue?.username ?? '',
+            description: response.description
+          }));
         })
       );
   }
 
   clearProfile(): void {
     this._myProfile.set(null);
+  }
+
+  refreshProfile(): void {
+    this._myProfile.set(null);
+    this.me().subscribe();
   }
 }

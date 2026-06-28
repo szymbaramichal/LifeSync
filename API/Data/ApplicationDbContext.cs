@@ -14,11 +14,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> context
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>()
-            .HasIndex(u => u.FirebaseUID)
-            .IsUnique();
-        
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
@@ -28,12 +26,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> context
 
         var textUserId = httpContextAccessor.HttpContext?.User.FindFirst(AuthConstants.FirebaseUidClaimType)?.Value;;
         Guid userId = Guid.TryParse(textUserId, out var parsedUserId) ? parsedUserId : Guid.Empty;
-        
+
         var utcNow = DateTime.UtcNow;
         foreach (var entry in entries)
         {
-            var entity = entry.Entity as Shared.BaseEntity;
-            if (entity is null) continue;
+            if (entry.Entity is not BaseEntity entity) continue;
 
             if (entry.State == EntityState.Added)
             {

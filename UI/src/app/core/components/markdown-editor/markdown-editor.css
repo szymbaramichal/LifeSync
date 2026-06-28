@@ -1,0 +1,38 @@
+.markdown-editor-wrapper {
+  width: 100%;
+}
+
+/* Override EasyMDE defaults to blend with Angular Material look */
+.markdown-editor-wrapper .EasyMDEContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.markdown-editor-wrapper .EasyMDEContainer .CodeMirror {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.markdown-editor-wrapper .EasyMDEContainer .CodeMirror:hover {
+  border-color: rgba(0, 0, 0, 0.38);
+}
+
+.markdown-editor-wrapper .EasyMDEContainer .CodeMirror.CodeMirror-focused {
+  border-color: var(--mat-sys-primary, #6200ee);
+  border-width: 2px;
+}
+
+.markdown-editor-wrapper .editor-toolbar {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px 4px 0 0;
+  background-color: #fafafa;
+}
+
+.markdown-editor-wrapper .editor-toolbar button:hover,
+.markdown-editor-wrapper .editor-toolbar button.active {
+  background-color: rgba(0, 0, 0, 0.08);
+  border-color: transparent;
+}

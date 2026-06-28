@@ -10,3 +10,43 @@
   padding-right: 0.5rem;
   padding-bottom: 0.5rem;
 }
+
+.me-username {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.me-picture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.me-icon {
+  font-size: 10rem;
+  height: 10rem;
+  width: 10rem;
+  margin-top: 2rem;
+}
+
+.me-toggle-container {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.me-description {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  min-height: 70px;
+  border-radius: 8px;
+  background-color: var(--mat-sys-surface-variant);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.edit-actions {
+  display: flex;
+  flex-direction: row-reverse;
+}
