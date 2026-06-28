@@ -27,7 +27,6 @@ export class ProfileService {
   me(): Observable<MeDto> {
     const cached = this._myProfile();
     if (cached) {
-      console.log('cached!');
       return of(cached);
     }
 
