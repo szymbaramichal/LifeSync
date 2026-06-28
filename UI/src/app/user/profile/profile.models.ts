@@ -21,3 +21,12 @@ export interface CreateProfileResponse {
   username: string;
   description: string;
 }
+
+export interface UpdateProfileRequest {
+  description: string;
+}
+
+export interface UpdateProfileResponse {
+  id: string;
+  description: string;
+}

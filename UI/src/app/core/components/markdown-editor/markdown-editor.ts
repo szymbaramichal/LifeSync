@@ -6,16 +6,25 @@ import {
   OnDestroy,
   Output,
   EventEmitter,
-  Input
+  Input,
+  forwardRef
 } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import EasyMDE from 'easymde';
 
 @Component({
   selector: 'markdown-editor',
   templateUrl: './markdown-editor.html',
-  styleUrl: './markdown-editor.css'
+  styleUrl: './markdown-editor.css',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => MarkdownEditorComponent),
+      multi: true
+    }
+  ]
 })
-export class MarkdownEditorComponent implements AfterViewInit, OnDestroy {
+export class MarkdownEditorComponent implements AfterViewInit, OnDestroy, ControlValueAccessor {
   @ViewChild('editorTextarea', { static: true }) textarea!: ElementRef<HTMLTextAreaElement>;
 
   @Input() initialValue: string = '';
@@ -23,6 +32,26 @@ export class MarkdownEditorComponent implements AfterViewInit, OnDestroy {
   @Output() valueChange = new EventEmitter<string>();
 
   private easyMDE!: EasyMDE;
+  private onChange: (value: string) => void = () => {};
+  private onTouched: () => void = () => {};
+
+  // Called by Angular when the form control value changes programmatically
+  writeValue(value: string): void {
+    if (this.easyMDE) {
+      this.easyMDE.value(value ?? '');
+    } else {
+      // Store until ngAfterViewInit
+      this.initialValue = value ?? '';
+    }
+  }
+
+  registerOnChange(fn: (value: string) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
 
   ngAfterViewInit(): void {
     this.easyMDE = new EasyMDE({
@@ -38,9 +67,15 @@ export class MarkdownEditorComponent implements AfterViewInit, OnDestroy {
       ]
     });
 
-    // Listen to changes in the editor and emit them to Angular
+    // Notify Angular forms and emit output on every change
     this.easyMDE.codemirror.on('change', () => {
-      this.valueChange.emit(this.easyMDE.value());
+      const val = this.easyMDE.value();
+      this.onChange(val);
+      this.valueChange.emit(val);
+    });
+
+    this.easyMDE.codemirror.on('blur', () => {
+      this.onTouched();
     });
   }
 

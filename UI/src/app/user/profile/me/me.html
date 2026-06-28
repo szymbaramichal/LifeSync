@@ -5,18 +5,30 @@
     </div>
     <div class="me-username">{{me().username}}</div>
 
-    @if (editMode())
-    {
-      <markdown-editor
-        [initialValue]="'### Start typing here...'"
-        (valueChange)="onMarkdownChange($event)"></markdown-editor>
-      <div class="output-preview">
-        <h3>Raw Output:</h3>
-        <pre>{{ currentMarkdown() }}</pre>
+    <div class="me-toggle-container">
+      <mat-slide-toggle
+        [checked]="editMode()"
+        (change)="onToggleEditMode($event.checked)">
+        Edit Profile
+      </mat-slide-toggle>
+    </div>
+
+    <form [formGroup]="updateForm" (ngSubmit)="onUpdate()">
+      <div>
+        <h3>Description</h3>
+        @if (editMode())
+        {
+          <markdown-editor
+            formControlName="description"></markdown-editor>
+
+          <div class="edit-actions">
+            <button matButton="tonal" type="submit" [disabled]="isLoading() || updateForm.invalid">Save changes</button>
+          </div>
+        } @else {
+          <div class="me-description" [innerHtml]="currentMarkdown() | markdown | async"> </div>
+        }
       </div>
-    } @else {
-      <div [innerHtml]="'# abc' | markdown | async"> </div>
-    }
+    </form>
     <div class="actions">
       <button matButton="filled" (click)="onLogout()">Logout</button>
     </div>

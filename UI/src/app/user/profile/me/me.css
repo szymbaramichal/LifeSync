@@ -30,3 +30,23 @@
   width: 10rem;
   margin-top: 2rem;
 }
+
+.me-toggle-container {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.me-description {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  min-height: 70px;
+  border-radius: 8px;
+  background-color: var(--mat-sys-surface-variant);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.edit-actions {
+  display: flex;
+  flex-direction: row-reverse;
+}
